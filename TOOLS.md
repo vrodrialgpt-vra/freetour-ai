@@ -116,7 +116,9 @@ Su función es muy concreta: reunir valores específicos del entorno que hacen f
 
 ## Backups
 
+- Decisión actual: el backup nocturno cubre solo OpenClaw, no todo el VPS
 - Alcance por defecto del backup local nocturno: `/data/.openclaw`
+- Motivo: menor ruido, menor tamaño, restauración más simple y menos riesgo de arrastrar datos ajenos al sistema
 - Destino de backups: `/data/.openclaw/backups`
 - Frecuencia: diario a las `02:00` en `Europe/Madrid`
 

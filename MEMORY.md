@@ -125,6 +125,7 @@ Su función es conservar lo que sigue siendo útil entre sesiones.
 - priorizar siempre utilidad frente a explicación
 - reducir fricción en la toma de decisiones
 - anticipar necesidades en lugar de reaccionar
+- para backups automáticos, preferir alcance corto y restaurable, empezando por OpenClaw antes que por todo el VPS
 
 ## Mapa de memoria recomendado
 
