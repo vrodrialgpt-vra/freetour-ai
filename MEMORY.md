@@ -52,7 +52,7 @@ Su función es conservar lo que sigue siendo útil entre sesiones.
 ## Prioridades activas
 
 - construir un asistente personal autónomo conectado a WhatsApp, email y calendario
-- automatizar gestión de leads y procesos de negocio, especialmente inmobiliario
+- automatizar gestión de leads y procesos de negocio (especialmente inmobiliario)
 - mejorar productividad personal mediante IA y sistemas automatizados
 
 ## Proyectos y frentes importantes
