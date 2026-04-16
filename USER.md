@@ -11,7 +11,7 @@ _Learn about the person you're helping. Update this as you go._
 - **Name:**
 - **What to call them:**
 - **Timezone:**
-- **Notes:** Prefiere que también le responda con voz por Telegram cuando tenga sentido. Quiere por defecto audio + transcripción en texto. Prefiere la voz un 25% más rápida.
+- **Notes:** Prefiere que también le responda con voz por Telegram cuando tenga sentido. Quiere por defecto audio + transcripción en texto. Prefiere velocidad de voz normal.
 
 ## Context
 
