@@ -1,5 +1,5 @@
 import { router } from 'expo-router'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { Card, HeroCard, PrimaryButton, Screen, Section, SecondaryButton } from '../src/components/ui'
 import { colors } from '../src/constants/theme'
 import { cities } from '../src/data/pois'
@@ -11,6 +11,7 @@ export default function HomeScreen() {
   const user = useAppStore((state) => state.user)
   const preferences = useAppStore((state) => state.preferences)
   const activeRoute = useAppStore((state) => state.activeRoute)
+  const pois = useAppStore((state) => state.pois)
   const city = cities[0]
 
   if (!hydrated) {
@@ -57,6 +58,21 @@ export default function HomeScreen() {
           <QuickAction emoji="⭐" title="Favoritos" subtitle={`${user.favouritePoiIds.length} guardados`} onPress={() => router.push('/settings')} />
           <QuickAction emoji="⚙️" title="Tu estilo" subtitle="Idioma, audio y más" onPress={() => router.push('/settings')} />
         </View>
+      </Section>
+
+      <Section title="Lugares que te recomiendo" subtitle="Con imagen, contexto y acceso rápido.">
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.horizontalList}>
+          {pois.slice(0, 4).map((poi) => (
+            <Pressable key={poi.id} style={styles.poiCard} onPress={() => router.push({ pathname: '/poi/[id]', params: { id: poi.id } } as any)}>
+              {poi.imageUrl ? <Image source={{ uri: poi.imageUrl }} style={styles.poiImage} resizeMode="cover" /> : null}
+              <View style={styles.poiCardBody}>
+                <Text style={styles.poiCardTitle}>{poi.name}</Text>
+                <Text style={styles.poiCardSubtitle}>{poi.subtitle}</Text>
+                <Text numberOfLines={2} style={styles.poiCardText}>{poi.hook}</Text>
+              </View>
+            </Pressable>
+          ))}
+        </ScrollView>
       </Section>
 
       <Section title="Tu próxima experiencia" subtitle="Sin pasos raros, sin lío.">
@@ -127,6 +143,13 @@ function translateDepth(depth: string) {
 
 const styles = StyleSheet.create({
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
+  horizontalList: { gap: 12, paddingRight: 12 },
+  poiCard: { width: 250, backgroundColor: colors.card, borderRadius: 18, overflow: 'hidden', borderWidth: 1, borderColor: colors.border },
+  poiImage: { width: '100%', height: 130 },
+  poiCardBody: { padding: 12, gap: 6 },
+  poiCardTitle: { fontSize: 16, fontWeight: '800', color: colors.ink },
+  poiCardSubtitle: { color: colors.primaryDark, fontWeight: '700' },
+  poiCardText: { color: colors.inkSoft, lineHeight: 19 },
   actionCard: {
     width: '47%',
     backgroundColor: colors.card,

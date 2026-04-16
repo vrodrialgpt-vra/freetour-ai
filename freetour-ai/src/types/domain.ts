@@ -30,6 +30,11 @@ export interface PointOfInterest {
   hook: string
   shortNarrative: string
   fullNarrative?: string
+  imageUrl?: string
+  externalUrl?: string
+  bookingTip?: string
+  bestMoment?: string
+  quickFacts?: string[]
   tags: string[]
   familyFriendly: boolean
   hiddenGem?: boolean

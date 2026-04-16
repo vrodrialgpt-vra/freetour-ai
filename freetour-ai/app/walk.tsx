@@ -1,5 +1,6 @@
+import { router } from 'expo-router'
 import { useState } from 'react'
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Image, Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import { Card, HeroCard, PrimaryButton, Screen, SecondaryButton, Section } from '../src/components/ui'
 import { colors } from '../src/constants/theme'
 import { cities } from '../src/data/pois'
@@ -44,6 +45,7 @@ export default function WalkScreen() {
               <Text style={styles.helper}>{Math.round(nearby[0].distanceMeters)} m de distancia</Text>
               <View style={styles.buttonGap}>
                 <PrimaryButton label="Escuchar ahora" onPress={replayLead} />
+                <SecondaryButton label="Ver ficha" onPress={() => router.push({ pathname: '/poi/[id]', params: { id: leadPoi.id } } as any)} />
                 {active ? <SecondaryButton label="Pausar paseo" onPress={() => setActive(false)} /> : null}
               </View>
             </>
@@ -54,6 +56,21 @@ export default function WalkScreen() {
             </>
           )}
         </Card>
+      </Section>
+
+      <Section title="También tienes cerca" subtitle="Más opciones por si quieres improvisar.">
+        <View style={styles.nearbyList}>
+          {nearby.slice(0, 3).map((match) => (
+            <Pressable key={match.poi.id} style={styles.nearbyCard} onPress={() => router.push({ pathname: '/poi/[id]', params: { id: match.poi.id } } as any)}>
+              {match.poi.imageUrl ? <Image source={{ uri: match.poi.imageUrl }} style={styles.nearbyImage} resizeMode="cover" /> : null}
+              <View style={styles.nearbyBody}>
+                <Text style={styles.nearbyTitle}>{match.poi.name}</Text>
+                <Text style={styles.nearbyMeta}>{Math.round(match.distanceMeters)} m · {match.poi.category}</Text>
+                <Text numberOfLines={2} style={styles.text}>{match.poi.shortNarrative}</Text>
+              </View>
+            </Pressable>
+          ))}
+        </View>
       </Section>
 
       <Section title="Cómo te acompaña" subtitle="Automática, pero con control.">
@@ -98,6 +115,12 @@ const styles = StyleSheet.create({
   mapFallback: { height: 260, borderRadius: 18, alignItems: 'center', justifyContent: 'center', backgroundColor: '#EAF4FF', padding: 24, gap: 8 },
   mapEmoji: { fontSize: 42 },
   poiTitle: { fontSize: 20, fontWeight: '800', color: colors.ink },
+  nearbyList: { gap: 12 },
+  nearbyCard: { flexDirection: 'row', backgroundColor: colors.card, borderRadius: 18, overflow: 'hidden', borderWidth: 1, borderColor: colors.border },
+  nearbyImage: { width: 96, height: 96 },
+  nearbyBody: { flex: 1, padding: 12, gap: 4 },
+  nearbyTitle: { fontSize: 16, fontWeight: '800', color: colors.ink },
+  nearbyMeta: { color: colors.primaryDark, fontWeight: '700', textTransform: 'capitalize' },
   poiSubtitle: { color: colors.primaryDark, fontWeight: '700' },
   text: { color: colors.inkSoft, lineHeight: 21 },
   helper: { color: colors.primaryDark, fontWeight: '700' },

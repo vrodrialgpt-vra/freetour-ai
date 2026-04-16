@@ -4,11 +4,14 @@ import { PointOfInterest, UserPreferences } from '../types/domain'
 let activePoiId: string | null = null
 
 function composeNarration(poi: PointOfInterest, preferences: UserPreferences) {
+  const practical = [poi.bestMoment, poi.bookingTip].filter(Boolean).join(' ')
+  const facts = poi.quickFacts?.slice(0, preferences.depth === 'expanded' ? 3 : 1).join(' ') ?? ''
+
   if (preferences.depth === 'short') return `${poi.hook} ${poi.shortNarrative}`
   if (preferences.depth === 'expanded' && poi.fullNarrative) {
-    return `${poi.hook} ${poi.shortNarrative} ${poi.fullNarrative}`
+    return `${poi.hook} ${poi.shortNarrative} ${poi.fullNarrative} ${practical} ${facts}`.trim()
   }
-  return `${poi.hook} ${poi.shortNarrative}`
+  return `${poi.hook} ${poi.shortNarrative} ${practical}`.trim()
 }
 
 export async function speakPoi(poi: PointOfInterest, preferences: UserPreferences) {

@@ -17,6 +17,12 @@ export const barcelonaPois: PointOfInterest[] = [
       'La Sagrada Família no es solo una iglesia famosa. Es una obra viva, llena de símbolos, luz y detalles que hacen que cada fachada cuente una historia distinta.',
     fullNarrative:
       'La Sagrada Família resume la visión de Gaudí: naturaleza, fe, geometría y asombro. Aunque sigue en construcción, ya funciona como un relato inmenso sobre Barcelona y su identidad.',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Basilica_de_la_Sagrada_Familia_2021.jpg/1280px-Basilica_de_la_Sagrada_Familia_2021.jpg',
+    externalUrl: 'https://es.wikipedia.org/wiki/Templo_Expiatorio_de_la_Sagrada_Familia',
+    bookingTip: 'Si quieres entrar, mejor reservar con antelación, sobre todo en horas centrales.',
+    bestMoment: 'A primera hora o al atardecer la luz suele ser más bonita y hay menos presión visual.',
+    quickFacts: ['Gaudí dedicó gran parte de su vida a esta obra.', 'Sigue en construcción más de un siglo después.', 'Es uno de los lugares más visitados de España.'],
     tags: ['gaudi', 'modernismo', 'imprescindible'],
     familyFriendly: true,
   },
@@ -34,6 +40,12 @@ export const barcelonaPois: PointOfInterest[] = [
     hook: 'Aquí parece que las paredes respiran.',
     shortNarrative:
       'Casa Batlló es una de las obras más juguetonas de Gaudí. Balcones, colores y formas orgánicas convierten el edificio en una fantasía urbana.',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Casa_Batll%C3%B3_%28Barcelona%29_-_2.jpg/1280px-Casa_Batll%C3%B3_%28Barcelona%29_-_2.jpg',
+    externalUrl: 'https://es.wikipedia.org/wiki/Casa_Batll%C3%B3',
+    bookingTip: 'Si vas a entrar, intenta evitar media mañana, suele ser la franja más cargada.',
+    bestMoment: 'Desde fuera luce especialmente bien con luz suave de tarde.',
+    quickFacts: ['Está en pleno Passeig de Gràcia.', 'Su tejado se asocia a la espalda de un dragón.', 'Es una de las fachadas más fotografiadas de Barcelona.'],
     tags: ['gaudi', 'passeig-de-gracia', 'fachada'],
     familyFriendly: true,
   },
@@ -51,6 +63,12 @@ export const barcelonaPois: PointOfInterest[] = [
     hook: 'Aquí el tiempo va más despacio.',
     shortNarrative:
       'En pleno barrio gótico, la catedral reúne siglos de historia, poder religioso y vida urbana. Es uno de esos lugares donde Barcelona enseña su versión más antigua.',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Barcelona_Cathedral_West_Facade.jpg/1280px-Barcelona_Cathedral_West_Facade.jpg',
+    externalUrl: 'https://es.wikipedia.org/wiki/Catedral_de_la_Santa_Cruz_y_Santa_Eulalia_de_Barcelona',
+    bookingTip: 'Combina muy bien con un paseo por callejuelas del gótico, no lo veas como parada aislada.',
+    bestMoment: 'Por la mañana suele sentirse más tranquila que al final del día.',
+    quickFacts: ['Está dedicada a Santa Eulalia.', 'Su claustro tiene ocas desde hace siglos.', 'Es una gran puerta de entrada al barrio gótico.'],
     tags: ['gotico', 'historia', 'imprescindible'],
     familyFriendly: true,
   },
@@ -68,6 +86,12 @@ export const barcelonaPois: PointOfInterest[] = [
     hook: 'Si Barcelona oliera a algo, aquí tienes una pista.',
     shortNarrative:
       'La Boqueria es uno de los mercados más conocidos de Europa. Mezcla tradición, turismo y gastronomía en un espacio lleno de energía.',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Boqueria_Market_Barcelona_2014.jpg/1280px-Boqueria_Market_Barcelona_2014.jpg',
+    externalUrl: 'https://es.wikipedia.org/wiki/Mercado_de_La_Boquer%C3%ADa',
+    bookingTip: 'Si buscas comer mejor y con menos agobio, entra un poco más al fondo y evita los primeros puestos.',
+    bestMoment: 'A media mañana conserva ambiente sin llegar al pico más caótico.',
+    quickFacts: ['Está junto a La Rambla.', 'Tiene siglos de historia comercial.', 'Es uno de los mercados más famosos del continente.'],
     tags: ['mercado', 'gastronomia', 'la-rambla'],
     familyFriendly: true,
   },
@@ -85,6 +109,12 @@ export const barcelonaPois: PointOfInterest[] = [
     hook: 'Aquí la ciudad se abre entera delante de ti.',
     shortNarrative:
       'Los Búnkers del Carmel combinan memoria histórica y panorámica brutal. Fueron defensa antiaérea, hoy son un mirador muy querido por locales y viajeros.',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Barcelona_Panorama_from_Bunkers_del_Carmel.jpg/1280px-Barcelona_Panorama_from_Bunkers_del_Carmel.jpg',
+    externalUrl: 'https://es.wikipedia.org/wiki/Tur%C3%B3_de_la_Rovira',
+    bookingTip: 'Lleva agua y algo de tiempo, aquí lo bonito es quedarse un rato mirando la ciudad.',
+    bestMoment: 'Atardecer, si el cielo acompaña.',
+    quickFacts: ['Se encuentran en el Turó de la Rovira.', 'Fueron una batería antiaérea.', 'Hoy son uno de los miradores favoritos de muchos locales.'],
     tags: ['mirador', 'panoramica', 'menos-turistico'],
     familyFriendly: true,
     hiddenGem: true,

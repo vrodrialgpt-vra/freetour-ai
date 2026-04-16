@@ -1,5 +1,6 @@
+import { router } from 'expo-router'
 import { useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
 import { Card, Chip, HeroCard, PrimaryButton, Screen, Section } from '../src/components/ui'
 import { colors } from '../src/constants/theme'
 import { useAppStore } from '../src/store/appStore'
@@ -40,13 +41,15 @@ export default function RoutePlannerScreen() {
                 const poi = pois.find((item) => item.id === stop.poiId)
                 if (!poi) return null
                 return (
-                  <View key={stop.poiId} style={styles.stopRow}>
+                  <Pressable key={stop.poiId} style={styles.stopRow} onPress={() => router.push({ pathname: '/poi/[id]', params: { id: stop.poiId } } as any)}>
                     <Text style={styles.stopOrder}>{stop.order}</Text>
+                    {poi.imageUrl ? <Image source={{ uri: poi.imageUrl }} style={styles.stopImage} resizeMode="cover" /> : null}
                     <View style={styles.stopCopy}>
                       <Text style={styles.stopTitle}>{poi.name}</Text>
                       <Text style={styles.stopMeta}>{stop.walkFromPreviousMin} min andando · {stop.visitDurationMin} min allí</Text>
+                      <Text numberOfLines={2} style={styles.stopExcerpt}>{poi.hook}</Text>
                     </View>
-                  </View>
+                  </Pressable>
                 )
               })}
             </>
@@ -69,7 +72,9 @@ const styles = StyleSheet.create({
   helper: { color: colors.primaryDark, fontWeight: '700' },
   stopRow: { flexDirection: 'row', gap: 12, paddingTop: 12 },
   stopOrder: { width: 28, height: 28, borderRadius: 14, backgroundColor: '#EAF4FF', textAlign: 'center', textAlignVertical: 'center', lineHeight: 28, color: colors.primaryDark, fontWeight: '800' },
+  stopImage: { width: 72, height: 72, borderRadius: 14 },
   stopCopy: { flex: 1, gap: 4 },
   stopTitle: { fontWeight: '800', color: colors.ink },
   stopMeta: { color: colors.inkSoft },
+  stopExcerpt: { color: colors.primaryDark, lineHeight: 18 },
 })
