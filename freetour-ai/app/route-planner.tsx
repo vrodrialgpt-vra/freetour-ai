@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Card, Chip, HeroCard, PrimaryButton, Screen, Section } from '../src/components/ui'
 import { colors } from '../src/constants/theme'
@@ -11,19 +11,17 @@ export default function RoutePlannerScreen() {
   const createRoute = useAppStore((state) => state.createRoute)
   const route = useAppStore((state) => state.activeRoute)
   const pois = useAppStore((state) => state.pois)
-  const preferences = useAppStore((state) => state.preferences)
-  const computedRoute = useMemo(() => route, [route])
 
   return (
     <Screen scroll>
       <HeroCard
-        title="Ruta automática"
-        subtitle="Le dices cuánto tiempo tienes y la app te devuelve una ruta lógica, caminable y conectada con el modo paseo."
+        title="Tu ruta en segundos"
+        subtitle="Elige el tiempo que tienes y te proponemos un paseo claro, lógico y fácil de seguir."
         ctaLabel="Generar ruta"
         onPress={() => createRoute(minutes)}
       />
 
-      <Section title="Tiempo disponible" subtitle="MVP: entrada simple para arrancar rápido.">
+      <Section title="¿Cuánto tiempo tienes?" subtitle="Empieza sin formularios largos.">
         <View style={styles.chips}>
           {presets.map((preset) => (
             <Chip key={preset} label={`${preset} min`} active={minutes === preset} onPress={() => setMinutes(preset)} />
@@ -31,21 +29,14 @@ export default function RoutePlannerScreen() {
         </View>
       </Section>
 
-      <Section title="Cómo piensa la app" subtitle="Heurística simple, mantenible y realista para un MVP.">
+      <Section title="Tu ruta" subtitle="Pensada para caminar bien, no para hacerte zigzaguear.">
         <Card>
-          <Text style={styles.cardText}>1. Filtra por ciudad, intereses y categorías ocultas. 2. Puntúa por relevancia turística + preferencias. 3. Ordena con un nearest neighbour para evitar zigzags absurdos. 4. Ajusta número de paradas a tu tiempo.</Text>
-          <Text style={styles.helper}>Prioridad actual: {preferences.routePreference === 'shorter' ? 'ruta corta' : 'ruta rica en contenido'}.</Text>
-        </Card>
-      </Section>
-
-      <Section title="Resultado" subtitle="Lo importante visible de un vistazo.">
-        <Card>
-          {computedRoute ? (
+          {route ? (
             <>
-              <Text style={styles.routeTitle}>{computedRoute.title}</Text>
-              <Text style={styles.cardText}>{computedRoute.summary}</Text>
-              <Text style={styles.helper}>{computedRoute.stops.length} paradas · {computedRoute.totalMinutes} min · {computedRoute.totalWalkingMinutes} min caminando</Text>
-              {computedRoute.stops.map((stop) => {
+              <Text style={styles.title}>{route.title}</Text>
+              <Text style={styles.text}>{route.summary}</Text>
+              <Text style={styles.helper}>{route.stops.length} paradas · {route.totalMinutes} min · {route.totalWalkingMinutes} min caminando</Text>
+              {route.stops.map((stop) => {
                 const poi = pois.find((item) => item.id === stop.poiId)
                 if (!poi) return null
                 return (
@@ -53,14 +44,17 @@ export default function RoutePlannerScreen() {
                     <Text style={styles.stopOrder}>{stop.order}</Text>
                     <View style={styles.stopCopy}>
                       <Text style={styles.stopTitle}>{poi.name}</Text>
-                      <Text style={styles.stopMeta}>{stop.walkFromPreviousMin} min andando · {stop.visitDurationMin} min de visita</Text>
+                      <Text style={styles.stopMeta}>{stop.walkFromPreviousMin} min andando · {stop.visitDurationMin} min allí</Text>
                     </View>
                   </View>
                 )
               })}
             </>
           ) : (
-            <Text style={styles.cardText}>Todavía no has generado ninguna ruta. Para el MVP, queremos que esto se resuelva en menos de 10 segundos y sin formularios largos.</Text>
+            <>
+              <Text style={styles.title}>Aún no has creado una ruta</Text>
+              <Text style={styles.text}>Elige tu tiempo y te proponemos una ruta lista para salir a caminar.</Text>
+            </>
           )}
         </Card>
       </Section>
@@ -70,9 +64,9 @@ export default function RoutePlannerScreen() {
 
 const styles = StyleSheet.create({
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
-  cardText: { color: colors.inkSoft, lineHeight: 21 },
+  title: { fontSize: 20, fontWeight: '800', color: colors.ink },
+  text: { color: colors.inkSoft, lineHeight: 21 },
   helper: { color: colors.primaryDark, fontWeight: '700' },
-  routeTitle: { fontSize: 20, fontWeight: '800', color: colors.ink },
   stopRow: { flexDirection: 'row', gap: 12, paddingTop: 12 },
   stopOrder: { width: 28, height: 28, borderRadius: 14, backgroundColor: '#EAF4FF', textAlign: 'center', textAlignVertical: 'center', lineHeight: 28, color: colors.primaryDark, fontWeight: '800' },
   stopCopy: { flex: 1, gap: 4 },

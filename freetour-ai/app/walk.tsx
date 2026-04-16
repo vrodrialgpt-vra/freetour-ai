@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
-import MapView, { Marker, Polyline } from 'react-native-maps'
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import { Card, HeroCard, PrimaryButton, Screen, SecondaryButton, Section } from '../src/components/ui'
 import { colors } from '../src/constants/theme'
 import { cities } from '../src/data/pois'
@@ -10,7 +9,6 @@ import { useAppStore } from '../src/store/appStore'
 export default function WalkScreen() {
   const [active, setActive] = useState(false)
   const { nearby, leadPoi, permissionError, replayLead } = useWalkingGuide(active)
-  const preferences = useAppStore((state) => state.preferences)
   const route = useAppStore((state) => state.activeRoute)
   const pois = useAppStore((state) => state.pois)
   const city = cities[0]
@@ -18,67 +16,52 @@ export default function WalkScreen() {
   return (
     <Screen scroll>
       <HeroCard
-        title="Modo paseo"
-        subtitle="Tu flujo principal: abrir, activar y caminar. La app hace el resto sin freírte a toques."
-        ctaLabel={active ? 'Pausar paseo' : 'Activar paseo'}
+        title={active ? 'Paseo activo' : 'Modo paseo'}
+        subtitle={active ? 'Camina tranquilo. La app te avisará cuando haya algo que merezca la pena.' : 'Actívalo y deja que la ciudad te vaya hablando mientras paseas.'}
+        ctaLabel={active ? 'Pausar' : 'Activar paseo'}
         onPress={() => setActive((value) => !value)}
       />
 
       <Card style={styles.mapCard}>
-        <MapView style={styles.map} initialRegion={city.center}>
-          {pois.map((poi) => (
-            <Marker key={poi.id} coordinate={{ latitude: poi.latitude, longitude: poi.longitude }} title={poi.name} description={poi.subtitle} />
-          ))}
-          {route ? (
-            <Polyline
-              coordinates={route.stops
-                .map((stop) => pois.find((poi) => poi.id === stop.poiId))
-                .filter(Boolean)
-                .map((poi) => ({ latitude: poi!.latitude, longitude: poi!.longitude }))}
-              strokeColor={colors.mapRoute}
-              strokeWidth={4}
-            />
-          ) : null}
-        </MapView>
+        {Platform.OS === 'web' ? (
+          <View style={styles.mapFallback}>
+            <Text style={styles.mapEmoji}>🗺️</Text>
+            <Text style={styles.poiTitle}>Mapa de la ruta</Text>
+            <Text style={styles.text}>En móvil verás el mapa interactivo. Aquí te mostramos una vista simple para seguir avanzando rápido.</Text>
+          </View>
+        ) : (
+          <NativeMap pois={pois} route={route} initialRegion={city.center} />
+        )}
       </Card>
 
-      <Section title="Estado ahora" subtitle="Información pensada para mirar poco rato mientras paseas.">
-        <Card>
-          <StatusRow label="Ciudad" value={city.name} />
-          <StatusRow label="Audio" value={preferences.audioMode === 'auto' ? 'Automático' : 'Manual'} />
-          <StatusRow label="Detección" value={preferences.detectionSensitivity} />
-          <StatusRow label="Puntos cerca" value={`${nearby.length}`} />
-          {permissionError ? <Text style={styles.error}>{permissionError}</Text> : null}
-        </Card>
-      </Section>
-
-      <Section title="Siguiente historia" subtitle="La app detecta el mejor punto cercano y evita repeticiones molestas.">
+      <Section title="Lo siguiente" subtitle="Lo más cercano y más interesante primero.">
         <Card>
           {leadPoi ? (
             <>
               <Text style={styles.poiTitle}>{leadPoi.name}</Text>
               <Text style={styles.poiSubtitle}>{leadPoi.subtitle}</Text>
-              <Text style={styles.cardText}>{leadPoi.hook}</Text>
-              <Text style={styles.helper}>{Math.round(nearby[0].distanceMeters)} m · radio dinámico según tus preferencias</Text>
-              <View style={styles.rowButtons}>
-                <PrimaryButton label="Reproducir ahora" onPress={replayLead} />
-                <SecondaryButton label="Pausar paseo" onPress={() => setActive(false)} />
+              <Text style={styles.text}>{leadPoi.hook}</Text>
+              <Text style={styles.helper}>{Math.round(nearby[0].distanceMeters)} m de distancia</Text>
+              <View style={styles.buttonGap}>
+                <PrimaryButton label="Escuchar ahora" onPress={replayLead} />
+                {active ? <SecondaryButton label="Pausar paseo" onPress={() => setActive(false)} /> : null}
               </View>
             </>
           ) : (
             <>
-              <Text style={styles.poiTitle}>Nada cerca todavía</Text>
-              <Text style={styles.cardText}>Si todavía no has arrancado, activa el modo paseo. Si ya vas andando, la app esperará a que estés realmente cerca de algo que merezca la pena.</Text>
+              <Text style={styles.poiTitle}>Todavía no hay nada cerca</Text>
+              <Text style={styles.text}>Activa el paseo y sigue caminando. Cuando te acerques a un lugar interesante, la app te lo contará.</Text>
             </>
           )}
         </Card>
       </Section>
 
-      <Section title="Control y confianza" subtitle="Automática no significa invasiva.">
+      <Section title="Cómo te acompaña" subtitle="Automática, pero con control.">
         <Card>
-          <Text style={styles.cardText}>El audio solo salta si el punto es relevante, estás lo bastante cerca y no vas demasiado rápido. Si ya lo escuchaste, no repite salvo que tú quieras.</Text>
+          <Text style={styles.text}>No repite el mismo punto todo el rato, evita disparar audio si vas demasiado rápido y prioriza los lugares que realmente tienes cerca.</Text>
+          {permissionError ? <Text style={styles.error}>{permissionError}</Text> : null}
           <Pressable>
-            <Text style={styles.link}>Esto se puede afinar en ajustes</Text>
+            <Text style={styles.link}>Ajustar experiencia</Text>
           </Pressable>
         </Card>
       </Section>
@@ -86,26 +69,39 @@ export default function WalkScreen() {
   )
 }
 
-function StatusRow({ label, value }: { label: string; value: string }) {
+function NativeMap({ pois, route, initialRegion }: { pois: any[]; route: any; initialRegion: any }) {
+  const MapView = require('react-native-maps').default
+  const { Marker, Polyline } = require('react-native-maps')
+
   return (
-    <View style={styles.statusRow}>
-      <Text style={styles.statusLabel}>{label}</Text>
-      <Text style={styles.statusValue}>{value}</Text>
-    </View>
+    <MapView style={styles.map} initialRegion={initialRegion}>
+      {pois.map((poi) => (
+        <Marker key={poi.id} coordinate={{ latitude: poi.latitude, longitude: poi.longitude }} title={poi.name} description={poi.subtitle} />
+      ))}
+      {route ? (
+        <Polyline
+          coordinates={route.stops
+            .map((stop: any) => pois.find((poi) => poi.id === stop.poiId))
+            .filter(Boolean)
+            .map((poi: any) => ({ latitude: poi.latitude, longitude: poi.longitude }))}
+          strokeColor={colors.mapRoute}
+          strokeWidth={4}
+        />
+      ) : null}
+    </MapView>
   )
 }
 
 const styles = StyleSheet.create({
   mapCard: { padding: 0, overflow: 'hidden' },
   map: { height: 260, borderRadius: 18 },
-  cardText: { color: colors.inkSoft, lineHeight: 21 },
-  error: { color: colors.danger, fontWeight: '700' },
+  mapFallback: { height: 260, borderRadius: 18, alignItems: 'center', justifyContent: 'center', backgroundColor: '#EAF4FF', padding: 24, gap: 8 },
+  mapEmoji: { fontSize: 42 },
   poiTitle: { fontSize: 20, fontWeight: '800', color: colors.ink },
   poiSubtitle: { color: colors.primaryDark, fontWeight: '700' },
-  helper: { color: colors.inkSoft, fontSize: 13 },
-  rowButtons: { gap: 10 },
-  link: { color: colors.primary, fontWeight: '700' },
-  statusRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4 },
-  statusLabel: { color: colors.inkSoft },
-  statusValue: { color: colors.ink, fontWeight: '800', textTransform: 'capitalize' },
+  text: { color: colors.inkSoft, lineHeight: 21 },
+  helper: { color: colors.primaryDark, fontWeight: '700' },
+  buttonGap: { gap: 10 },
+  link: { color: colors.primary, fontWeight: '800' },
+  error: { color: colors.danger, fontWeight: '700' },
 })

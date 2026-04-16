@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Switch, Text, View } from 'react-native'
+import { StyleSheet, Switch, Text, View } from 'react-native'
 import { Card, Chip, HeroCard, Screen, Section } from '../src/components/ui'
 import { colors } from '../src/constants/theme'
 import { useAppStore } from '../src/store/appStore'
@@ -9,9 +9,9 @@ export default function SettingsScreen() {
 
   return (
     <Screen scroll>
-      <HeroCard title="Tu experiencia" subtitle="La configuración es estratégica: cambia de verdad lo que oyes, cuándo salta y cómo te acompaña la app." />
+      <HeroCard title="Tu experiencia" subtitle="Cambia idioma, audio y estilo para que la visita se sienta más tuya." />
 
-      <Section title="Contenido" subtitle="En MVP incluimos lo que impacta más en la experiencia real.">
+      <Section title="Contenido" subtitle="Lo que escuchas y cómo te lo cuenta.">
         <Card>
           <Text style={styles.label}>Idioma</Text>
           <View style={styles.rowWrap}>
@@ -28,15 +28,15 @@ export default function SettingsScreen() {
         </Card>
       </Section>
 
-      <Section title="Audio" subtitle="Controlar sin complicar.">
+      <Section title="Audio" subtitle="Más automático o más manual, como prefieras.">
         <Card>
           <ToggleRow title="Audio automático" value={preferences.audioMode === 'auto'} onChange={(value) => updatePreferences({ audioMode: value ? 'auto' : 'manual' })} />
-          <ToggleRow title="Ver transcripción" value={preferences.showTranscript} onChange={(value) => updatePreferences({ showTranscript: value })} />
-          <ToggleRow title="Vibrar antes de narrar" value={preferences.vibrateBeforeNarration} onChange={(value) => updatePreferences({ vibrateBeforeNarration: value })} />
+          <ToggleRow title="Ver texto en pantalla" value={preferences.showTranscript} onChange={(value) => updatePreferences({ showTranscript: value })} />
+          <ToggleRow title="Vibrar antes de empezar" value={preferences.vibrateBeforeNarration} onChange={(value) => updatePreferences({ vibrateBeforeNarration: value })} />
         </Card>
       </Section>
 
-      <Section title="Detección GPS" subtitle="Reglas pensadas para evitar disparos torpes o repetidos.">
+      <Section title="Detección" subtitle="Para que la app acierte mejor mientras caminas.">
         <Card>
           <Text style={styles.label}>Sensibilidad</Text>
           <View style={styles.rowWrap}>
@@ -49,28 +49,18 @@ export default function SettingsScreen() {
               />
             ))}
           </View>
-          <ToggleRow title="No repetir puntos ya escuchados" value={preferences.avoidRepeats} onChange={(value) => updatePreferences({ avoidRepeats: value })} />
-          <ToggleRow title="Solo cuando detecte que caminas" value={preferences.onlyWhenWalking} onChange={(value) => updatePreferences({ onlyWhenWalking: value })} />
+          <ToggleRow title="No repetir lugares ya escuchados" value={preferences.avoidRepeats} onChange={(value) => updatePreferences({ avoidRepeats: value })} />
+          <ToggleRow title="Solo cuando voy andando" value={preferences.onlyWhenWalking} onChange={(value) => updatePreferences({ onlyWhenWalking: value })} />
         </Card>
       </Section>
 
-      <Section title="Ruta" subtitle="El MVP incluye solo los ajustes con más retorno de valor.">
+      <Section title="Ruta" subtitle="Más corta o más rica en contenido.">
         <Card>
-          <Text style={styles.label}>Prioridad de ruta</Text>
           <View style={styles.rowWrap}>
             <Chip label="Más corta" active={preferences.routePreference === 'shorter'} onPress={() => updatePreferences({ routePreference: 'shorter' })} />
             <Chip label="Más rica" active={preferences.routePreference === 'richer'} onPress={() => updatePreferences({ routePreference: 'richer' })} />
           </View>
           <ToggleRow title="Añadir paradas gastronómicas" value={preferences.includeFoodStops} onChange={(value) => updatePreferences({ includeFoodStops: value })} />
-          <ToggleRow title="Recalcular si me desvío" value={preferences.autoRecalculateRoute} onChange={(value) => updatePreferences({ autoRecalculateRoute: value })} />
-        </Card>
-      </Section>
-
-      <Section title="Accesibilidad y uso" subtitle="Simpleza visible en la calle.">
-        <Card>
-          <ToggleRow title="Subtítulos siempre visibles" value={preferences.subtitlesAlwaysOn} onChange={(value) => updatePreferences({ subtitlesAlwaysOn: value })} />
-          <ToggleRow title="Navegación simplificada" value={preferences.simplifiedNavigation} onChange={(value) => updatePreferences({ simplifiedNavigation: value })} />
-          <ToggleRow title="Alto contraste" value={preferences.highContrast} onChange={(value) => updatePreferences({ highContrast: value })} />
         </Card>
       </Section>
     </Screen>
