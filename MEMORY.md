@@ -43,6 +43,7 @@ Su función es conservar lo que sigue siendo útil entre sesiones.
 - Cuándo quiere confirmación antes de actuar: `solo en decisiones críticas o con impacto`
 - Cómo prefiere recibir entregables: `listos para copiar/usar, bien formateados`
 - Canal preferido para alertas y resúmenes proactivos: `Telegram`
+- Chat activo actual para alertas y resúmenes: `Telegram 6726472184`
 
 ## Contexto duradero del usuario o equipo
 
@@ -57,6 +58,7 @@ Su función es conservar lo que sigue siendo útil entre sesiones.
 - automatizar gestión de leads y procesos de negocio (especialmente inmobiliario)
 - mejorar productividad personal mediante IA y sistemas automatizados
 - activar vigilancia proactiva de correo y agenda, con notificaciones y resúmenes por Telegram
+- mantener vigilancia automática cada 15 minutos y resumen diario a las 08:30 Europe/Madrid
 
 ## Proyectos y frentes importantes
 

@@ -1,0 +1,12 @@
+{
+  "notifications": {
+    "channel": "telegram",
+    "target": "6726472184"
+  },
+  "monitoring": {
+    "emailCalendarWatchCron": "*/15 * * * *",
+    "dailyBriefCron": "30 8 * * *",
+    "timezone": "Europe/Madrid",
+    "agendaReminders": ["24h", "2h", "15m"]
+  }
+}

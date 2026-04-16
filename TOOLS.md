@@ -63,7 +63,10 @@ Su función es muy concreta: reunir valores específicos del entorno que hacen f
 
 - `telegram_bot_victor` → `tg_bot_01`
 - `email_queue` → `email_inbound_01`
-- Uso decidido por defecto: alertas y resúmenes proactivos por Telegram, pendiente de fijar chat o usuario destino exacto
+- Uso decidido por defecto: alertas y resúmenes proactivos por Telegram
+- Chat destino activo de Telegram: `6726472184`
+- Cron activo de vigilancia: cada `15 min`
+- Cron activo de resumen diario: `08:30` en `Europe/Madrid`
 
 ## Proyectos y herramientas externas
 
