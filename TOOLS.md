@@ -78,6 +78,7 @@ Su función es muy concreta: reunir valores específicos del entorno que hacen f
 - CLI de agente o coding tool: `/usr/bin/openclaw`
 - Logs: `/var/log/openclaw/`
 - Base de datos o mirror local: `/var/lib/openclaw/db.sqlite`
+- Preferencia por defecto en pantallas y diagnóstico: mostrar logs y número de versión cuando ayude a entender el estado interno
 
 ## Infraestructura local
 
@@ -112,6 +113,12 @@ Su función es muy concreta: reunir valores específicos del entorno que hacen f
 - Stack por defecto: `openclaw + claude-code`
 - Stack alternativo o fallback: `gpt-local-runtime`
 - Cómo se conmuta: fallback automático tras error o timeout (>2 intentos)
+
+## Backups
+
+- Alcance por defecto del backup local nocturno: `/data/.openclaw`
+- Destino de backups: `/data/.openclaw/backups`
+- Frecuencia: diario a las `02:00` en `Europe/Madrid`
 
 ## Mantenimiento
 

@@ -118,6 +118,7 @@ Su función es conservar lo que sigue siendo útil entre sesiones.
 - Qué conviene incluir normalmente: `ejemplos aplicables, pasos accionables, estructura`
 - Qué conviene evitar normalmente: `teoría extensa, ambigüedad, contenido genérico`
 - Cuándo resumir y cuándo profundizar: `resumir por defecto, profundizar solo si aporta valor claro`
+- Preferencia operativa de diagnóstico: `por defecto mostrar logs y versión para entender rápido qué pasa por dentro`
 
 ## Lecciones operativas duraderas
 

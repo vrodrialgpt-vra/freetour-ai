@@ -170,6 +170,8 @@ Aplica a:
 - endpoints
 - detalles del entorno
 
+Por defecto, cuando ayude a diagnosticar o validar comportamiento del sistema, prioriza mostrar logs y dejar visible la versión relevante para facilitar trazabilidad.
+
 Este archivo define el criterio, no la implementación.
 
 ## Workflows automáticos
