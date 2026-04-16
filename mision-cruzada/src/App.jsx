@@ -25,7 +25,7 @@ function pickRound(ageId, usedRounds) {
 }
 
 function App() {
-  const [ageId, setAgeId] = useState('family')
+  const [ageId, setAgeId] = useState('6-8')
   const [phase, setPhase] = useState(PHASES.setup)
   const [round, setRound] = useState(null)
   const [usedRounds, setUsedRounds] = useState([])
@@ -67,7 +67,7 @@ function App() {
     setSecondsLeft(TURN_SECONDS)
   }
 
-  const confirmResults = () => {
+  const saveScore = () => {
     setScores((prev) => ({
       p1: prev.p1 + (wins.p1 ? 1 : 0),
       p2: prev.p2 + (wins.p2 ? 1 : 0),
@@ -75,12 +75,12 @@ function App() {
   }
 
   const nextRound = () => {
-    confirmResults()
+    saveScore()
     startRound()
   }
 
   const finishRound = () => {
-    confirmResults()
+    saveScore()
     setPhase(PHASES.setup)
     setRound(null)
     setSecondsLeft(TURN_SECONDS)
@@ -90,24 +90,21 @@ function App() {
   return (
     <main className="app-shell">
       <section className="card">
-        <header className="header">
+        <header className="header kid">
           <div>
-            <p className="eyebrow">Misión Cruzada</p>
-            <h1>Juego para 2, fuera de la pantalla</h1>
+            <p className="eyebrow">{currentAge?.emoji} Misión Cruzada</p>
+            <h1>Juego para 2</h1>
+            <p className="subtitle">Mirad el móvil, guardadlo y jugad.</p>
           </div>
-          <div className="scoreboard">
-            <span>J1 {scores.p1}</span>
-            <span>J2 {scores.p2}</span>
+          <div className="scoreboard bubble">
+            <span>🙂 {scores.p1}</span>
+            <span>😄 {scores.p2}</span>
           </div>
         </header>
 
         {phase === PHASES.setup && (
           <>
-            <p className="lead">
-              El móvil solo reparte misiones. Luego se juega hablando, riendo y picándose cara a cara.
-            </p>
-
-            <div className="selector">
+            <div className="selector selector-kids">
               {AGE_GROUPS.map((group) => (
                 <button
                   key={group.id}
@@ -115,34 +112,29 @@ function App() {
                   className={group.id === ageId ? 'chip active' : 'chip'}
                   onClick={() => setAgeId(group.id)}
                 >
+                  <span>{group.emoji}</span>
                   {group.label}
                 </button>
               ))}
             </div>
 
-            <div className="info-grid">
-              <article>
-                <h2>Cómo va</h2>
-                <ul>
-                  <li>Jugador 1 ve su misión</li>
-                  <li>Pasa el móvil al Jugador 2</li>
-                  <li>Jugáis 75 segundos sin mirar la pantalla</li>
-                  <li>Al final marcáis quién cumplió</li>
-                </ul>
-              </article>
-              <article>
-                <h2>Modo actual</h2>
-                <p>{currentAge?.label}</p>
-                <p>Rondas guardadas: {usedRounds.length}</p>
-              </article>
+            <div className="hero-box">
+              <div className="hero-emoji">🎲</div>
+              <h2>Muy fácil</h2>
+              <ul className="kid-list">
+                <li>1. Mira tu misión</li>
+                <li>2. Pasa el móvil</li>
+                <li>3. Habla y juega</li>
+                <li>4. Mira quién ganó</li>
+              </ul>
             </div>
 
-            <div className="actions">
-              <button type="button" className="primary" onClick={startRound}>
-                Empezar ronda
+            <div className="actions stack">
+              <button type="button" className="primary big" onClick={startRound}>
+                Empezar
               </button>
               <button type="button" className="secondary" onClick={resetGame}>
-                Reiniciar partida
+                Empezar de nuevo
               </button>
             </div>
           </>
@@ -150,7 +142,7 @@ function App() {
 
         {round && phase === PHASES.reveal1 && (
           <RevealCard
-            player="Jugador 1"
+            player="Turno del jugador 1"
             type={MODE_LABELS[round.type]}
             mission={round.p1}
             onContinue={() => setPhase(PHASES.handoff1)}
@@ -159,15 +151,15 @@ function App() {
 
         {round && phase === PHASES.handoff1 && (
           <HandoffCard
-            title="Pásale el móvil al Jugador 2"
-            subtitle="Que no mire la misión anterior. Esto es parte del show."
+            title="Pásalo"
+            subtitle="Ahora mira el jugador 2"
             onContinue={() => setPhase(PHASES.reveal2)}
           />
         )}
 
         {round && phase === PHASES.reveal2 && (
           <RevealCard
-            player="Jugador 2"
+            player="Turno del jugador 2"
             type={MODE_LABELS[round.type]}
             mission={round.p2}
             onContinue={() => {
@@ -178,22 +170,22 @@ function App() {
         )}
 
         {round && phase === PHASES.countdown && (
-          <section className="phase-card countdown">
-            <p className="eyebrow">Ronda en marcha</p>
-            <h2>{secondsLeft}s</h2>
-            <p className="lead small">Guardad el móvil y jugad fuera de pantalla.</p>
+          <section className="phase-card countdown playful">
+            <p className="eyebrow">⏰ A jugar</p>
+            <h2 className="timer">{secondsLeft}</h2>
+            <p className="lead small">Guardad el móvil.</p>
             <button type="button" className="secondary" onClick={() => setPhase(PHASES.result)}>
-              Terminar antes
+              Ya está
             </button>
           </section>
         )}
 
         {round && phase === PHASES.result && (
-          <section className="phase-card">
-            <p className="eyebrow">Resolución</p>
-            <h2>¿Quién cumplió su misión?</h2>
+          <section className="phase-card playful">
+            <p className="eyebrow">🏁 Final</p>
+            <h2>¿Quién lo hizo?</h2>
 
-            <div className="result-grid">
+            <div className="result-grid kid-results">
               <label className={wins.p1 ? 'result-box win' : 'result-box'}>
                 <input
                   type="checkbox"
@@ -215,12 +207,12 @@ function App() {
               </label>
             </div>
 
-            <div className="actions">
-              <button type="button" className="primary" onClick={nextRound}>
-                Siguiente ronda
+            <div className="actions stack">
+              <button type="button" className="primary big" onClick={nextRound}>
+                Otra ronda
               </button>
               <button type="button" className="secondary" onClick={finishRound}>
-                Guardar y volver
+                Volver
               </button>
             </div>
           </section>
@@ -234,20 +226,20 @@ function RevealCard({ player, type, mission, onContinue }) {
   const [visible, setVisible] = useState(false)
 
   return (
-    <section className="phase-card">
+    <section className="phase-card playful">
       <p className="eyebrow">{player}</p>
-      <h2>Tu misión secreta</h2>
+      <h2>Tu misión</h2>
       <p className="badge">{type}</p>
 
       {!visible ? (
-        <button type="button" className="primary" onClick={() => setVisible(true)}>
-          Mostrar misión
+        <button type="button" className="primary big" onClick={() => setVisible(true)}>
+          Ver
         </button>
       ) : (
         <>
-          <div className="mission-box">{mission}</div>
+          <div className="mission-box kid">{mission}</div>
           <button type="button" className="secondary" onClick={onContinue}>
-            Ya la vi
+            Ya
           </button>
         </>
       )}
@@ -257,11 +249,11 @@ function RevealCard({ player, type, mission, onContinue }) {
 
 function HandoffCard({ title, subtitle, onContinue }) {
   return (
-    <section className="phase-card handoff">
-      <p className="eyebrow">Cambio de jugador</p>
+    <section className="phase-card handoff playful">
+      <p className="eyebrow">👉 Cambio</p>
       <h2>{title}</h2>
       <p className="lead small">{subtitle}</p>
-      <button type="button" className="primary" onClick={onContinue}>
+      <button type="button" className="primary big" onClick={onContinue}>
         Seguir
       </button>
     </section>
