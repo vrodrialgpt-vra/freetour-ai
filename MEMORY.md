@@ -38,6 +38,7 @@ Su función es conservar lo que sigue siendo útil entre sesiones.
 ### Forma de trabajar
 
 - Cómo prefiere que se ejecuten tareas complejas: `descomposición en pasos claros + ejecución directa`
+- Preferencia operativa para tareas pesadas: `usar subagentes por defecto para trabajo paralelo y liberar al agente principal`
 - Nivel de detalle que quiere en explicaciones: `medio, priorizando utilidad sobre teoría`
 - Cuándo quiere confirmación antes de actuar: `solo en decisiones críticas o con impacto`
 - Cómo prefiere recibir entregables: `listos para copiar/usar, bien formateados`

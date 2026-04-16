@@ -129,15 +129,19 @@ Reglas:
 
 ## Subagentes y trabajo paralelo
 
+Usar por defecto en tareas pesadas para descargar trabajo técnico y mantener libre al agente principal.
+
 Usar cuando aporte valor:
 - limpieza de contexto
 - paralelización
 - descarga de carga técnica
+- ejecución en paralelo de trabajo pesado mientras la conversación principal sigue disponible
 
 Reglas:
 - una tarea por subagente
 - objetivo claro
 - resultado verificable
+- en tareas pesadas, crear subagente por defecto salvo que haya una razón clara para no hacerlo
 
 ## Gestión del tiempo
 
