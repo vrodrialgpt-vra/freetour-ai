@@ -45,6 +45,7 @@ Regla:
 - Tipo de respuestas preferidas: `directas, accionables, sin relleno, con foco en impacto`
 - Preferencia de delivery: `respuestas estructuradas, claras y listas para usar`
 - Canal preferido para notificaciones y resúmenes: `Telegram`
+- Preferencia adicional: `resumen diario de noticias a las 07:00 por Telegram, ordenado por bloques y con acceso a la noticia completa`
 - Estilo de trabajo habitual: `orientado a objetivos, iterativo, pragmático, mezcla de estrategia y ejecución`
 
 ## Contexto en evolución

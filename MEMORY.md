@@ -44,6 +44,7 @@ Su función es conservar lo que sigue siendo útil entre sesiones.
 - Cómo prefiere recibir entregables: `listos para copiar/usar, bien formateados`
 - Canal preferido para alertas y resúmenes proactivos: `Telegram`
 - Chat activo actual para alertas y resúmenes: `Telegram 6726472184`
+- Resumen diario deseado: `noticias importantes a las 07:00, por bloques como internacional, nacional y deporte, con enlace a noticia completa`
 
 ## Contexto duradero del usuario o equipo
 
