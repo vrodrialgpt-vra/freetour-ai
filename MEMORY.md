@@ -45,6 +45,7 @@ Su función es conservar lo que sigue siendo útil entre sesiones.
 - Canal preferido para alertas y resúmenes proactivos: `Telegram`
 - Chat activo actual para alertas y resúmenes: `Telegram 6726472184`
 - Resumen diario deseado: `noticias importantes a las 07:00, por bloques como internacional, nacional y deporte, con enlace a noticia completa`
+- Apertura preferida de la rutina matinal: `primer bloque con el tiempo en Barcelona salvo que se indique otra localización`
 
 ## Contexto duradero del usuario o equipo
 

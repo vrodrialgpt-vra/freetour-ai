@@ -6,7 +6,9 @@
   "monitoring": {
     "emailCalendarWatchCron": "*/15 * * * *",
     "dailyBriefCron": "30 8 * * *",
+    "dailyNewsBriefCron": "0 7 * * *",
     "timezone": "Europe/Madrid",
-    "agendaReminders": ["24h", "2h", "15m"]
+    "agendaReminders": ["24h", "2h", "15m"],
+    "defaultWeatherLocation": "Barcelona"
   }
 }
