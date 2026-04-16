@@ -42,6 +42,7 @@ Su función es conservar lo que sigue siendo útil entre sesiones.
 - Nivel de detalle que quiere en explicaciones: `medio, priorizando utilidad sobre teoría`
 - Cuándo quiere confirmación antes de actuar: `solo en decisiones críticas o con impacto`
 - Cómo prefiere recibir entregables: `listos para copiar/usar, bien formateados`
+- Canal preferido para alertas y resúmenes proactivos: `Telegram`
 
 ## Contexto duradero del usuario o equipo
 
@@ -55,6 +56,7 @@ Su función es conservar lo que sigue siendo útil entre sesiones.
 - construir un asistente personal autónomo conectado a WhatsApp, email y calendario
 - automatizar gestión de leads y procesos de negocio (especialmente inmobiliario)
 - mejorar productividad personal mediante IA y sistemas automatizados
+- activar vigilancia proactiva de correo y agenda, con notificaciones y resúmenes por Telegram
 
 ## Proyectos y frentes importantes
 

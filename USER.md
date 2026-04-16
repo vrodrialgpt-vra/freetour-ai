@@ -44,6 +44,7 @@ Regla:
 - Nivel de autonomía esperado: `alto, se espera iniciativa y ejecución proactiva`
 - Tipo de respuestas preferidas: `directas, accionables, sin relleno, con foco en impacto`
 - Preferencia de delivery: `respuestas estructuradas, claras y listas para usar`
+- Canal preferido para notificaciones y resúmenes: `Telegram`
 - Estilo de trabajo habitual: `orientado a objetivos, iterativo, pragmático, mezcla de estrategia y ejecución`
 
 ## Contexto en evolución
