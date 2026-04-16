@@ -1,0 +1,107 @@
+import { PointOfInterest } from '../types/domain'
+
+export const barcelonaPois: PointOfInterest[] = [
+  {
+    id: 'sagrada-familia',
+    cityId: 'barcelona',
+    name: 'Sagrada Família',
+    subtitle: 'El gran icono de Gaudí',
+    latitude: 41.4036299,
+    longitude: 2.1743558,
+    category: 'architecture',
+    priority: 10,
+    activationRadius: 140,
+    audioDurationSec: 85,
+    hook: 'Mira arriba, aquí Gaudí convirtió piedra en movimiento.',
+    shortNarrative:
+      'La Sagrada Família no es solo una iglesia famosa. Es una obra viva, llena de símbolos, luz y detalles que hacen que cada fachada cuente una historia distinta.',
+    fullNarrative:
+      'La Sagrada Família resume la visión de Gaudí: naturaleza, fe, geometría y asombro. Aunque sigue en construcción, ya funciona como un relato inmenso sobre Barcelona y su identidad.',
+    tags: ['gaudi', 'modernismo', 'imprescindible'],
+    familyFriendly: true,
+  },
+  {
+    id: 'casa-batllo',
+    cityId: 'barcelona',
+    name: 'Casa Batlló',
+    subtitle: 'Una fachada que parece sacada de un cuento',
+    latitude: 41.391651,
+    longitude: 2.164772,
+    category: 'art',
+    priority: 9,
+    activationRadius: 100,
+    audioDurationSec: 70,
+    hook: 'Aquí parece que las paredes respiran.',
+    shortNarrative:
+      'Casa Batlló es una de las obras más juguetonas de Gaudí. Balcones, colores y formas orgánicas convierten el edificio en una fantasía urbana.',
+    tags: ['gaudi', 'passeig-de-gracia', 'fachada'],
+    familyFriendly: true,
+  },
+  {
+    id: 'gothic-cathedral',
+    cityId: 'barcelona',
+    name: 'Catedral de Barcelona',
+    subtitle: 'Corazón gótico de la ciudad',
+    latitude: 41.383962,
+    longitude: 2.176199,
+    category: 'history',
+    priority: 8,
+    activationRadius: 120,
+    audioDurationSec: 80,
+    hook: 'Aquí el tiempo va más despacio.',
+    shortNarrative:
+      'En pleno barrio gótico, la catedral reúne siglos de historia, poder religioso y vida urbana. Es uno de esos lugares donde Barcelona enseña su versión más antigua.',
+    tags: ['gotico', 'historia', 'imprescindible'],
+    familyFriendly: true,
+  },
+  {
+    id: 'mercat-boqueria',
+    cityId: 'barcelona',
+    name: 'La Boqueria',
+    subtitle: 'Color, ruido y hambre feliz',
+    latitude: 41.381914,
+    longitude: 2.171563,
+    category: 'food',
+    priority: 8,
+    activationRadius: 90,
+    audioDurationSec: 60,
+    hook: 'Si Barcelona oliera a algo, aquí tienes una pista.',
+    shortNarrative:
+      'La Boqueria es uno de los mercados más conocidos de Europa. Mezcla tradición, turismo y gastronomía en un espacio lleno de energía.',
+    tags: ['mercado', 'gastronomia', 'la-rambla'],
+    familyFriendly: true,
+  },
+  {
+    id: 'bunkers-carmel',
+    cityId: 'barcelona',
+    name: 'Búnkers del Carmel',
+    subtitle: 'Una de las mejores vistas de Barcelona',
+    latitude: 41.418675,
+    longitude: 2.152681,
+    category: 'hidden-gem',
+    priority: 7,
+    activationRadius: 160,
+    audioDurationSec: 65,
+    hook: 'Aquí la ciudad se abre entera delante de ti.',
+    shortNarrative:
+      'Los Búnkers del Carmel combinan memoria histórica y panorámica brutal. Fueron defensa antiaérea, hoy son un mirador muy querido por locales y viajeros.',
+    tags: ['mirador', 'panoramica', 'menos-turistico'],
+    familyFriendly: true,
+    hiddenGem: true,
+  },
+]
+
+export const cities = [
+  {
+    id: 'barcelona',
+    name: 'Barcelona',
+    heroTitle: 'Tu guía inteligente para pasear mejor',
+    heroSubtitle: 'Activa el modo paseo y deja que la ciudad te vaya hablando.',
+    center: {
+      latitude: 41.390205,
+      longitude: 2.154007,
+      latitudeDelta: 0.08,
+      longitudeDelta: 0.08,
+    },
+  },
+]
