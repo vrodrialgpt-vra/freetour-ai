@@ -18,110 +18,75 @@ export default function WalkScreen() {
   return (
     <Screen scroll>
       <HeroCard
-        title={active ? 'Paseo activado' : 'Modo paseo, pero bien resuelto'}
-        subtitle={active ? 'Cuando tengas algo interesante cerca, te lo soltamos claro, visual y sin ruido.' : 'Actívalo para que la ciudad te vaya proponiendo paradas sin dejarte delante de una pantalla vacía.'}
-        ctaLabel={active ? 'Pausar paseo' : 'Activar paseo'}
+        title={active ? 'Walking with context' : 'Walking mode, redesigned'}
+        subtitle={active ? 'A calmer companion while you move, showing what deserves your attention next.' : 'The experience should feel guided and elegant, never empty or confusing.'}
+        ctaLabel={active ? 'Pause walking mode' : 'Start walking mode'}
         onPress={() => setActive((value) => !value)}
       />
 
-      <Card style={styles.mapCard}>
-        {Platform.OS === 'web' ? (
-          <View style={styles.mapFallback}>
-            <Text style={styles.mapEmoji}>🧭</Text>
-            <Text style={styles.mapTitle}>Vista rápida del paseo</Text>
-            <Text style={styles.text}>En web te enseñamos una vista ligera y clara. En móvil se apoya además en mapa interactivo.</Text>
-          </View>
-        ) : (
-          <NativeMap pois={pois} route={route} initialRegion={city.center} />
-        )}
-      </Card>
-
-      <Section title="Qué haría yo ahora" subtitle="La app debería orientarte, no dejarte adivinar.">
+      <Section title="Now showing" subtitle="One clear recommendation, beautifully framed.">
         <Card>
           {leadPoi ? (
             <>
-              <PoiImage uri={leadPoi.imageUrl} emoji="🎧" height={190} rounded={20} />
-              <Text style={styles.poiTitle}>{leadPoi.name}</Text>
-              <Text style={styles.poiSubtitle}>{leadPoi.subtitle}</Text>
+              <PoiImage uri={leadPoi.imageUrl} emoji="◆" height={220} rounded={24} />
+              <Text style={styles.eyebrow}>Recommended now</Text>
+              <Text style={styles.title}>{leadPoi.name}</Text>
+              <Text style={styles.subtitle}>{leadPoi.subtitle}</Text>
               <Text style={styles.text}>{leadPoi.shortNarrative}</Text>
-              <Text style={styles.helper}>{Math.round(nearby[0]?.distanceMeters ?? 0)} m · audio listo</Text>
+              <Text style={styles.meta}>{Math.round(nearby[0]?.distanceMeters ?? 0)} m away</Text>
               <View style={styles.buttonGap}>
-                <PrimaryButton label="Escuchar ahora" onPress={replayLead} />
-                <SecondaryButton label="Abrir ficha" onPress={() => router.push({ pathname: '/poi/[id]', params: { id: leadPoi.id } } as any)} />
+                <PrimaryButton label="Play audio" onPress={replayLead} />
+                <SecondaryButton label="Open place" onPress={() => router.push({ pathname: '/poi/[id]', params: { id: leadPoi.id } } as any)} />
               </View>
             </>
           ) : (
             <EmptyState
-              emoji="🚶"
-              title={active ? 'Sigue andando un poco más' : 'El paseo está parado'}
-              subtitle={active ? 'Todavía no detecto un punto claro cerca, pero abajo te dejo recomendaciones visuales para no perder el ritmo.' : 'Si activas el paseo, la app intentará proponerte la siguiente parada sin que tengas que buscarla tú.'}
-              action={<PrimaryButton label={active ? 'Seguir explorando' : 'Activar paseo'} onPress={() => setActive(true)} />}
+              emoji="◆"
+              title={active ? 'No clear nearby stop yet' : 'Walking mode is currently off'}
+              subtitle={active ? 'Keep moving, or use the curated suggestions below while the next highlight emerges.' : 'Turn it on and the app will try to surface meaningful places as you walk.'}
+              action={<PrimaryButton label={active ? 'Keep browsing' : 'Start now'} onPress={() => setActive(true)} />}
             />
           )}
         </Card>
       </Section>
 
-      <Section title="Recomendaciones inmediatas" subtitle="Aunque el paseo no dispare audio, aquí siempre tienes algo útil.">
-        <View style={styles.suggestionList}>
-          {(nearby.length ? nearby.slice(0, 3).map((item) => item.poi) : fallbackSuggestions).map((poi) => (
-            <Card key={poi.id} style={styles.suggestionCard}>
-              <PoiImage uri={poi.imageUrl} emoji="📍" height={150} rounded={18} />
-              <Text style={styles.poiTitle}>{poi.name}</Text>
-              <Text style={styles.poiSubtitle}>{poi.subtitle}</Text>
+      <Section title="Curated nearby" subtitle="Even if the live guide is quiet, the screen should still feel rich.">
+        <View style={styles.stack}>
+          {(nearby.length ? nearby.slice(0, 3).map((item) => item.poi) : fallbackSuggestions).map((poi, index) => (
+            <Card key={poi.id} style={styles.placeCard}>
+              <PoiImage uri={poi.imageUrl} emoji="◆" height={170} rounded={22} />
+              <Text style={styles.index}>0{index + 1}</Text>
+              <Text style={styles.title}>{poi.name}</Text>
+              <Text style={styles.subtitle}>{poi.subtitle}</Text>
               <Text style={styles.text} numberOfLines={3}>{poi.hook}</Text>
-              <SecondaryButton label="Ver sitio" onPress={() => router.push({ pathname: '/poi/[id]', params: { id: poi.id } } as any)} />
+              <SecondaryButton label="View details" onPress={() => router.push({ pathname: '/poi/[id]', params: { id: poi.id } } as any)} />
             </Card>
           ))}
         </View>
       </Section>
 
-      <Section title="Tu contexto" subtitle="Pequeñas ayudas para que esto se sienta más estable.">
+      <Section title="Walking context" subtitle="Useful status, presented with more restraint.">
         <Card>
-          <Text style={styles.text}>{route ? `Tienes una ruta activa de ${route.totalMinutes} min guardada.` : 'Todavía no tienes ruta activa guardada.'}</Text>
-          {permissionError ? <Text style={styles.error}>{permissionError}</Text> : <Text style={styles.ok}>Ubicación y estado del paseo listos para seguir mejorando la experiencia.</Text>}
-          <SecondaryButton label="Ajustes del paseo" onPress={() => router.push('/settings')} />
+          <Text style={styles.text}>{route ? `Saved route available: ${route.totalMinutes} minutes in ${city.name}.` : 'No saved route is currently active.'}</Text>
+          {permissionError ? <Text style={styles.error}>{permissionError}</Text> : <Text style={styles.ok}>The experience is ready to become more context-aware as you move.</Text>}
+          {Platform.OS === 'web' ? <Text style={styles.note}>Map is simplified on web to keep the experience lighter.</Text> : null}
         </Card>
       </Section>
     </Screen>
   )
 }
 
-function NativeMap({ pois, route, initialRegion }: { pois: any[]; route: any; initialRegion: any }) {
-  const MapView = require('react-native-maps').default
-  const { Marker, Polyline } = require('react-native-maps')
-
-  return (
-    <MapView style={styles.map} initialRegion={initialRegion}>
-      {pois.map((poi) => (
-        <Marker key={poi.id} coordinate={{ latitude: poi.latitude, longitude: poi.longitude }} title={poi.name} description={poi.subtitle} />
-      ))}
-      {route ? (
-        <Polyline
-          coordinates={route.stops
-            .map((stop: any) => pois.find((poi) => poi.id === stop.poiId))
-            .filter(Boolean)
-            .map((poi: any) => ({ latitude: poi.latitude, longitude: poi.longitude }))}
-          strokeColor={colors.mapRoute}
-          strokeWidth={4}
-        />
-      ) : null}
-    </MapView>
-  )
-}
-
 const styles = StyleSheet.create({
-  mapCard: { padding: 0, overflow: 'hidden' },
-  map: { height: 260, borderRadius: 18 },
-  mapFallback: { height: 240, borderRadius: 18, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.cardMuted, padding: 24, gap: 10 },
-  mapEmoji: { fontSize: 44 },
-  mapTitle: { fontSize: 20, fontWeight: '800', color: colors.ink },
-  poiTitle: { fontSize: 20, fontWeight: '900', color: colors.ink },
-  poiSubtitle: { color: colors.primaryDark, fontWeight: '700' },
-  text: { color: colors.inkSoft, lineHeight: 21 },
-  helper: { color: colors.primaryDark, fontWeight: '700' },
+  eyebrow: { color: colors.primary, fontSize: 12, fontWeight: '800', textTransform: 'uppercase', letterSpacing: 1 },
+  title: { color: colors.ink, fontSize: 24, fontWeight: '900' },
+  subtitle: { color: colors.inkSoft, fontWeight: '700' },
+  text: { color: colors.inkSoft, lineHeight: 22 },
+  meta: { color: colors.primary, fontWeight: '800' },
   buttonGap: { gap: 10 },
-  suggestionList: { gap: 12 },
-  suggestionCard: { padding: 10 },
+  stack: { gap: 12 },
+  placeCard: { padding: 12 },
+  index: { color: colors.primary, fontSize: 14, fontWeight: '900', letterSpacing: 1 },
   error: { color: colors.danger, fontWeight: '700' },
   ok: { color: colors.success, fontWeight: '700' },
+  note: { color: colors.inkMuted, fontSize: 13, lineHeight: 19 },
 })

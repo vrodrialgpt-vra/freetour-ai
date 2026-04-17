@@ -17,10 +17,8 @@ export function Screen({ children, scroll = false }: PropsWithChildren<{ scroll?
 
 export function HeroCard({ title, subtitle, ctaLabel, onPress }: { title: string; subtitle: string; ctaLabel?: string; onPress?: () => void }) {
   return (
-    <LinearGradient colors={[colors.primary, '#7D8BFF', '#9EE6DB']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.hero}>
-      <View style={styles.heroBadge}>
-        <Text style={styles.heroEyebrow}>FreeTour AI</Text>
-      </View>
+    <LinearGradient colors={['#221C17', '#14110F', '#0F0D0C']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.hero}>
+      <Text style={styles.heroEyebrow}>FreeTour AI</Text>
       <Text style={styles.heroTitle}>{title}</Text>
       <Text style={styles.heroSubtitle}>{subtitle}</Text>
       {ctaLabel && onPress ? (
@@ -32,12 +30,12 @@ export function HeroCard({ title, subtitle, ctaLabel, onPress }: { title: string
   )
 }
 
-export function PoiImage({ uri, emoji = '📍', height = 180, rounded = 22 }: { uri?: string; emoji?: string; height?: number; rounded?: number }) {
+export function PoiImage({ uri, emoji = '◆', height = 180, rounded = 24 }: { uri?: string; emoji?: string; height?: number; rounded?: number }) {
   const [failed, setFailed] = useState(false)
 
   if (!uri || failed) {
     return (
-      <LinearGradient colors={[colors.cardMuted, '#EEF3FF', colors.blush]} style={[styles.imageFallback, { height, borderRadius: rounded }]}>
+      <LinearGradient colors={['#241F1B', '#191613']} style={[styles.imageFallback, { height, borderRadius: rounded }]}>
         <Text style={styles.imageFallbackEmoji}>{emoji}</Text>
       </LinearGradient>
     )
@@ -99,65 +97,49 @@ export function SecondaryButton({ label, onPress }: { label: string; onPress?: (
 
 const styles = StyleSheet.create({
   fill: { flex: 1, backgroundColor: colors.sand },
-  scroll: { paddingBottom: spacing.xl + 12 },
-  screen: { flex: 1, backgroundColor: colors.sand, padding: spacing.md, gap: spacing.lg },
+  scroll: { paddingBottom: spacing.xl + 16 },
+  screen: { flex: 1, backgroundColor: colors.sand, padding: spacing.md, gap: spacing.xl },
   hero: {
-    borderRadius: 28,
+    borderRadius: 30,
     padding: spacing.lg,
     gap: spacing.sm,
+    borderWidth: 1,
+    borderColor: '#2C251F',
     shadowColor: colors.shadow,
     shadowOpacity: 1,
-    shadowRadius: 22,
-    shadowOffset: { width: 0, height: 10 },
-    elevation: 3,
+    shadowRadius: 24,
+    shadowOffset: { width: 0, height: 12 },
+    elevation: 4,
   },
-  heroBadge: {
-    alignSelf: 'flex-start',
-    backgroundColor: 'rgba(255,255,255,0.16)',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 999,
-  },
-  heroEyebrow: { color: 'rgba(255,255,255,0.95)', fontSize: 12, fontWeight: '800', textTransform: 'uppercase', letterSpacing: 0.6 },
-  heroTitle: { color: '#fff', fontSize: 30, fontWeight: '900', lineHeight: 34 },
-  heroSubtitle: { color: 'rgba(255,255,255,0.92)', fontSize: 15, lineHeight: 22 },
-  cta: { alignSelf: 'flex-start', backgroundColor: '#fff', paddingHorizontal: 18, paddingVertical: 12, borderRadius: 999, marginTop: 6 },
-  ctaText: { color: colors.primaryDark, fontWeight: '800' },
-  imageFallback: { width: '100%', alignItems: 'center', justifyContent: 'center' },
-  imageFallbackEmoji: { fontSize: 42 },
+  heroEyebrow: { color: colors.primary, fontSize: 12, fontWeight: '800', textTransform: 'uppercase', letterSpacing: 1.2 },
+  heroTitle: { color: colors.ink, fontSize: 34, fontWeight: '900', lineHeight: 38 },
+  heroSubtitle: { color: colors.inkSoft, fontSize: 15, lineHeight: 23 },
+  cta: { alignSelf: 'flex-start', backgroundColor: colors.primary, paddingHorizontal: 18, paddingVertical: 12, borderRadius: 999, marginTop: 8 },
+  ctaText: { color: '#0F0D0C', fontWeight: '900', letterSpacing: 0.3 },
+  imageFallback: { width: '100%', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: colors.border },
+  imageFallbackEmoji: { fontSize: 36, color: colors.primary },
   section: { gap: spacing.sm },
-  sectionHead: { gap: 3 },
-  sectionTitle: { fontSize: 24, fontWeight: '900', color: colors.ink },
-  sectionSubtitle: { fontSize: 14, color: colors.inkMuted, lineHeight: 20 },
+  sectionHead: { gap: 4 },
+  sectionTitle: { fontSize: 26, fontWeight: '900', color: colors.ink },
+  sectionSubtitle: { fontSize: 14, color: colors.inkMuted, lineHeight: 21 },
   card: {
     backgroundColor: colors.card,
-    borderRadius: 22,
+    borderRadius: 26,
     padding: spacing.md,
     borderWidth: 1,
     borderColor: colors.border,
     gap: spacing.sm,
-    shadowColor: colors.shadow,
-    shadowOpacity: 1,
-    shadowRadius: 18,
-    shadowOffset: { width: 0, height: 8 },
-    elevation: 2,
   },
-  emptyState: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 28,
-    paddingHorizontal: 16,
-    gap: 8,
-  },
-  emptyEmoji: { fontSize: 36 },
-  emptyTitle: { fontSize: 20, fontWeight: '800', color: colors.ink, textAlign: 'center' },
-  emptySubtitle: { fontSize: 15, lineHeight: 21, color: colors.inkSoft, textAlign: 'center' },
+  emptyState: { alignItems: 'center', justifyContent: 'center', paddingVertical: 30, paddingHorizontal: 16, gap: 10 },
+  emptyEmoji: { fontSize: 30, color: colors.primary },
+  emptyTitle: { fontSize: 21, fontWeight: '800', color: colors.ink, textAlign: 'center' },
+  emptySubtitle: { fontSize: 15, lineHeight: 22, color: colors.inkSoft, textAlign: 'center' },
   chip: { paddingHorizontal: 14, paddingVertical: 10, borderRadius: 999, backgroundColor: colors.cardMuted, borderWidth: 1, borderColor: colors.border },
-  chipActive: { backgroundColor: '#ECEFFF', borderColor: '#CCD4FF' },
+  chipActive: { backgroundColor: '#2A2117', borderColor: '#4B3920' },
   chipText: { color: colors.inkSoft, fontWeight: '700' },
-  chipTextActive: { color: colors.primaryDark },
-  primaryButton: { backgroundColor: colors.primary, paddingVertical: 15, alignItems: 'center', borderRadius: 16 },
-  primaryButtonText: { color: '#fff', fontWeight: '800', fontSize: 16 },
-  secondaryButton: { backgroundColor: colors.cardMuted, paddingVertical: 15, alignItems: 'center', borderRadius: 16, borderWidth: 1, borderColor: colors.border },
+  chipTextActive: { color: colors.primary },
+  primaryButton: { backgroundColor: colors.primary, paddingVertical: 15, alignItems: 'center', borderRadius: 18 },
+  primaryButtonText: { color: '#0E0C0B', fontWeight: '900', fontSize: 16 },
+  secondaryButton: { backgroundColor: colors.cardMuted, paddingVertical: 15, alignItems: 'center', borderRadius: 18, borderWidth: 1, borderColor: colors.border },
   secondaryButtonText: { color: colors.ink, fontWeight: '700', fontSize: 16 },
 })
