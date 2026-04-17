@@ -57,7 +57,7 @@ export default function HomeScreen() {
 
       <Section title="Selected places" subtitle="Presented more like a travel magazine than a directory.">
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.carousel}>
-          {pois.slice(0, 4).map((poi) => (
+          {pois.slice(0, 6).map((poi) => (
             <Pressable key={poi.id} style={styles.editorialCard} onPress={() => router.push({ pathname: '/poi/[id]', params: { id: poi.id } } as any)}>
               <PoiImage uri={poi.imageUrl} emoji="◆" height={200} rounded={24} />
               <Text style={styles.cardEyebrow}>{poi.category}</Text>
@@ -87,6 +87,20 @@ export default function HomeScreen() {
               action={<PrimaryButton label="Create route" onPress={() => router.push('/route-planner')} />}
             />
           )}
+        </Card>
+      </Section>
+
+      <Section title="Around you in Barcelona" subtitle="Not just big icons. Also squares, monuments and smaller details worth stopping for.">
+        <Card>
+          {pois.slice(0, 5).map((poi, index) => (
+            <Pressable key={poi.id} style={styles.savedRow} onPress={() => router.push({ pathname: '/poi/[id]', params: { id: poi.id } } as any)}>
+              <Text style={styles.savedIndex}>0{index + 1}</Text>
+              <View style={styles.savedCopy}>
+                <Text style={styles.savedTitle}>{poi.name}</Text>
+                <Text style={styles.savedText}>{poi.subtitle}</Text>
+              </View>
+            </Pressable>
+          ))}
         </Card>
       </Section>
 
