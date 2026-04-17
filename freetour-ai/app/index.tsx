@@ -1,161 +1,103 @@
+import { useMemo, useState } from 'react'
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
 import { router } from 'expo-router'
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
-import { Card, EmptyState, HeroCard, PoiImage, PrimaryButton, Screen, Section, SecondaryButton } from '../src/components/ui'
-import { colors } from '../src/constants/theme'
-import { cities } from '../src/data/pois'
-import { useBoot } from '../src/hooks/useBoot'
-import { useAppStore } from '../src/store/appStore'
+import { Card, Field, Pill, Screen, Subtitle, Title, BigButton } from '../src/components/GameUI'
+import { starterCards, useGameStore } from '../src/store/gameStore'
 
 export default function HomeScreen() {
-  const hydrated = useBoot()
-  const user = useAppStore((state) => state.user)
-  const activeRoute = useAppStore((state) => state.activeRoute)
-  const pois = useAppStore((state) => state.pois)
-  const city = cities[0]
-  const favourites = pois.filter((poi) => user.favouritePoiIds.includes(poi.id))
+  const hydrated = useGameStore((s) => s.hydrated)
+  const profile = useGameStore((s) => s.profile)
+  const createProfile = useGameStore((s) => s.createProfile)
+  const setScreen = useGameStore((s) => s.setScreen)
+  const [name, setName] = useState(profile.name)
+  const [age, setAge] = useState(profile.age || '6')
+  const [starter, setStarter] = useState(profile.starter || starterCards[0].name)
+  const [avatarHue, setAvatarHue] = useState(profile.avatarHue)
+
+  const ready = useMemo(() => name.trim().length > 0, [name])
 
   if (!hydrated) {
     return (
       <Screen>
-        <Card>
-          <Text style={styles.headline}>Preparing your city guide</Text>
-          <Text style={styles.body}>Recovering your route, your saved places and your preferred style.</Text>
+        <Card color="#7DD3FC">
+          <Title>Loading adventure...</Title>
+          <Subtitle>Your save crystal is warming up.</Subtitle>
         </Card>
       </Screen>
     )
   }
 
-  if (!user.onboardingCompleted) {
+  if (profile.createdAt) {
     return (
       <Screen>
-        <HeroCard
-          title="A more elegant way to discover Barcelona"
-          subtitle="Not a list of places. A curated guide with atmosphere, context and a clear next step."
-          ctaLabel="Start setup"
-          onPress={() => router.push('/onboarding')}
-        />
+        <Card color="#6DDC7B">
+          <Pill label="Save loaded" color="#6DDC7B" />
+          <Title>Welcome back, {profile.name}!</Title>
+          <Subtitle>Your team, map, bag and settings were restored from local save storage.</Subtitle>
+          <BigButton
+            label="Continue game"
+            onPress={() => {
+              setScreen('world')
+              router.replace('/world' as never)
+            }}
+          />
+        </Card>
       </Screen>
     )
   }
 
   return (
-    <Screen scroll>
-      <HeroCard
-        title={`Barcelona, curated for walking`}
-        subtitle="A calmer, more refined interface for deciding where to go next, what matters there and how to keep moving without friction."
-        ctaLabel="Open walking mode"
-        onPress={() => router.push('/walk')}
-      />
+    <Screen>
+      <Card color="#FFD84D">
+        <Pill label="PixelMon Friends" color="#FFD84D" />
+        <Title>A tiny monster adventure for kids</Title>
+        <Subtitle>Pick a buddy, walk the map, battle softly, catch new friends and keep your save safe when the app closes.</Subtitle>
+      </Card>
 
-      <Section title="Your next move" subtitle="Three clear paths, designed to feel intentional.">
-        <View style={styles.featureGrid}>
-          <FeatureCard title="Walking mode" subtitle="Context-aware guidance while you move through the city." onPress={() => router.push('/walk')} />
-          <FeatureCard title="Planned route" subtitle="A cleaner itinerary shaped around your available time." onPress={() => router.push('/route-planner')} />
-          <FeatureCard title="Personal style" subtitle="Language, narration and pace tuned to your taste." onPress={() => router.push('/settings')} />
+      <Card color="#7DD3FC">
+        <Text style={styles.label}>Trainer name</Text>
+        <Field value={name} onChangeText={setName} placeholder="Type your name" />
+        <Text style={styles.label}>Age</Text>
+        <Field value={age} onChangeText={setAge} placeholder="6" width={100} />
+        <Text style={styles.label}>Color glow</Text>
+        <View style={styles.row}>
+          {['#7DD3FC', '#F9A8D4', '#FCD34D', '#86EFAC'].map((color) => (
+            <Pressable key={color} onPress={() => setAvatarHue(color)} style={[styles.colorDot, { backgroundColor: color }, avatarHue === color && styles.colorDotActive]} />
+          ))}
         </View>
-      </Section>
+      </Card>
 
-      <Section title="Selected places" subtitle="Presented more like a travel magazine than a directory.">
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.carousel}>
-          {pois.slice(0, 6).map((poi) => (
-            <Pressable key={poi.id} style={styles.editorialCard} onPress={() => router.push({ pathname: '/poi/[id]', params: { id: poi.id } } as any)}>
-              <PoiImage uri={poi.imageUrl} emoji="◆" height={200} rounded={24} />
-              <Text style={styles.cardEyebrow}>{poi.category}</Text>
-              <Text style={styles.cardTitle}>{poi.name}</Text>
-              <Text style={styles.cardText} numberOfLines={3}>{poi.shortNarrative}</Text>
+      <Card color="#FF8A5C">
+        <Text style={styles.label}>Choose your first buddy</Text>
+        <View style={styles.grid}>
+          {starterCards.map((card) => (
+            <Pressable key={card.name} onPress={() => setStarter(card.name)} style={[styles.starterCard, starter === card.name && { borderColor: card.color, transform: [{ scale: 1.02 }] }]}>
+              <Image source={{ uri: card.sprite }} style={styles.sprite} />
+              <Text style={styles.cardName}>{card.name}</Text>
             </Pressable>
           ))}
-        </ScrollView>
-      </Section>
-
-      <Section title="Saved rhythm" subtitle="The app should remember where you were, not reset the experience.">
-        <Card>
-          {activeRoute ? (
-            <>
-              <Text style={styles.headline}>{activeRoute.title}</Text>
-              <Text style={styles.body}>{activeRoute.stops.length} stops, {activeRoute.totalMinutes} minutes, still saved for when you return.</Text>
-              <View style={styles.buttonGap}>
-                <PrimaryButton label="Resume route" onPress={() => router.push('/route-planner')} />
-                <SecondaryButton label="Continue walking" onPress={() => router.push('/walk')} />
-              </View>
-            </>
-          ) : (
-            <EmptyState
-              emoji="◆"
-              title="No saved route yet"
-              subtitle="When you create one, it should feel like part of your trip, not a temporary test."
-              action={<PrimaryButton label="Create route" onPress={() => router.push('/route-planner')} />}
-            />
-          )}
-        </Card>
-      </Section>
-
-      <Section title="Around you in Barcelona" subtitle="Not just big icons. Also squares, monuments and smaller details worth stopping for.">
-        <Card>
-          {pois.slice(0, 5).map((poi, index) => (
-            <Pressable key={poi.id} style={styles.savedRow} onPress={() => router.push({ pathname: '/poi/[id]', params: { id: poi.id } } as any)}>
-              <Text style={styles.savedIndex}>0{index + 1}</Text>
-              <View style={styles.savedCopy}>
-                <Text style={styles.savedTitle}>{poi.name}</Text>
-                <Text style={styles.savedText}>{poi.subtitle}</Text>
-              </View>
-            </Pressable>
-          ))}
-        </Card>
-      </Section>
-
-      <Section title="Saved places" subtitle="What caught your attention, kept accessible.">
-        <Card>
-          {favourites.length ? (
-            favourites.slice(0, 3).map((poi) => (
-              <Pressable key={poi.id} style={styles.savedRow} onPress={() => router.push({ pathname: '/poi/[id]', params: { id: poi.id } } as any)}>
-                <Text style={styles.savedIndex}>0{favourites.indexOf(poi) + 1}</Text>
-                <View style={styles.savedCopy}>
-                  <Text style={styles.savedTitle}>{poi.name}</Text>
-                  <Text style={styles.savedText}>{poi.subtitle}</Text>
-                </View>
-              </Pressable>
-            ))
-          ) : (
-            <Text style={styles.body}>You have not saved any places yet.</Text>
-          )}
-        </Card>
-      </Section>
-
-      <View style={styles.cityNote}>
-        <Text style={styles.cityNoteText}>{city.name} edition</Text>
-      </View>
+        </View>
+        <BigButton
+          label="Start adventure"
+          disabled={!ready}
+          onPress={() => {
+            createProfile({ name: name.trim(), age: age.trim() || '6', starter, avatarHue })
+            router.replace('/world' as never)
+          }}
+          color="#FF8A5C"
+        />
+      </Card>
     </Screen>
   )
 }
 
-function FeatureCard({ title, subtitle, onPress }: { title: string; subtitle: string; onPress: () => void }) {
-  return (
-    <Pressable style={styles.featureCard} onPress={onPress}>
-      <Text style={styles.featureTitle}>{title}</Text>
-      <Text style={styles.featureText}>{subtitle}</Text>
-    </Pressable>
-  )
-}
-
 const styles = StyleSheet.create({
-  featureGrid: { gap: 12 },
-  featureCard: { backgroundColor: colors.card, borderRadius: 26, padding: 20, borderWidth: 1, borderColor: colors.border, gap: 10 },
-  featureTitle: { fontSize: 20, fontWeight: '800', color: colors.ink },
-  featureText: { color: colors.inkSoft, lineHeight: 21 },
-  carousel: { gap: 14, paddingRight: 12 },
-  editorialCard: { width: 300, backgroundColor: colors.card, borderRadius: 28, padding: 12, borderWidth: 1, borderColor: colors.border, gap: 10 },
-  cardEyebrow: { color: colors.primary, fontSize: 12, fontWeight: '800', textTransform: 'uppercase', letterSpacing: 1 },
-  cardTitle: { color: colors.ink, fontSize: 22, fontWeight: '900' },
-  cardText: { color: colors.inkSoft, lineHeight: 22 },
-  headline: { color: colors.ink, fontSize: 22, fontWeight: '900', lineHeight: 28 },
-  body: { color: colors.inkSoft, lineHeight: 22 },
-  buttonGap: { gap: 10 },
-  savedRow: { flexDirection: 'row', gap: 14, alignItems: 'center', paddingVertical: 8 },
-  savedIndex: { color: colors.primary, fontSize: 18, fontWeight: '900', width: 28 },
-  savedCopy: { flex: 1, gap: 2 },
-  savedTitle: { color: colors.ink, fontWeight: '800' },
-  savedText: { color: colors.inkSoft },
-  cityNote: { alignItems: 'center', paddingBottom: 8 },
-  cityNoteText: { color: colors.inkMuted, textTransform: 'uppercase', letterSpacing: 2, fontSize: 11, fontWeight: '800' },
+  label: { color: '#ECF2FF', fontWeight: '800', fontSize: 15 },
+  row: { flexDirection: 'row', gap: 12 },
+  colorDot: { width: 38, height: 38, borderRadius: 999, borderWidth: 3, borderColor: 'transparent' },
+  colorDotActive: { borderColor: '#fff' },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, justifyContent: 'space-between' },
+  starterCard: { width: '47%', backgroundColor: 'rgba(255,255,255,0.12)', borderRadius: 20, padding: 12, alignItems: 'center', borderWidth: 2, borderColor: 'transparent' },
+  sprite: { width: 94, height: 94 },
+  cardName: { color: '#fff', fontWeight: '900', fontSize: 16 },
 })

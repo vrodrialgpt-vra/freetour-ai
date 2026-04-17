@@ -1,5 +1,5 @@
 {
-  "name": "freetour-ai",
+  "name": "pixelmon-friends",
   "version": "1.0.0",
   "main": "expo-router/entry",
   "scripts": {
@@ -7,7 +7,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "export:web": "expo export --platform web"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "2.2.0",

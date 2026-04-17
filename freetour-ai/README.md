@@ -1,49 +1,45 @@
-# FreeTour AI MVP
+# PixelMon Friends
 
-Base mobile-first para una app de turismo urbano con geolocalización, rutas y narración en audio.
+Child-friendly mobile game MVP inspired by classic monster-catching adventures, built with Expo + React Native.
 
-## Stack
+## What it includes
 
-- Expo + React Native + TypeScript
-- Expo Router
-- Zustand
-- Expo Location
-- Expo Speech
-- React Native Maps
-- AsyncStorage
+- profile creation with starter choice
+- overworld 5x5 tile map exploration
+- random encounters
+- turn-based battles with simple type effectiveness
+- capture flow with spark balls
+- inventory with berries and team potion
+- leveling and first evolution tier
+- multiple screens: home, map, battle, team, bag, profile, hidden admin
+- sound/voice/haptics toggles
+- robust local persistence with Zustand + AsyncStorage
+- web export path for fast publishing
+- first-gen Pokémon-inspired data using public PokeAPI artwork URLs
 
-## Qué incluye esta base
+## Persistence
 
-- onboarding corto
-- home enfocada en modo paseo
-- pantalla de modo paseo
-- pantalla de planificación de ruta
-- pantalla de preferencias
-- modelo de POIs y usuario
-- motor inicial de proximidad GPS
-- motor simple para evitar repeticiones
-- TTS local con Expo Speech
-- heurística MVP de rutas
+Save data is stored in local device storage under `pixel-mon-save-v1` and restores on app reopen/reload:
 
-## Cómo arrancar
+- profile
+- team and collection
+- inventory
+- map position and steps
+- battle state
+- settings
+- admin unlock flag
+
+## Run locally
 
 ```bash
 npm install
 npm run start
 ```
 
-## Typecheck
+## Web build
 
 ```bash
-npm run typecheck
+npm run export:web
 ```
 
-## Ciudad inicial
-
-- Barcelona
-
-## Siguiente paso natural
-
-- conectar backend real y CMS de contenidos
-- sustituir TTS local por TTS premium server-side cacheado
-- añadir analítica de recorridos y personalización progresiva
+The static site is emitted to `dist/` and can be deployed to Vercel or any static host.

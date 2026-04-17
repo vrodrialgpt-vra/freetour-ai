@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "FreeTour AI",
-    "slug": "freetour-ai",
+    "name": "PixelMon Friends",
+    "slug": "pixelmon-friends",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -9,37 +9,26 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#0D1B2A"
+      "backgroundColor": "#101427"
     },
     "ios": {
-      "supportsTablet": true,
-      "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "FreeTour AI usa tu ubicación para detectar monumentos cercanos y activar el modo paseo.",
-        "NSMicrophoneUsageDescription": "FreeTour AI puede usar audio para acompañarte mientras paseas."
-      }
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#0D1B2A"
+        "backgroundColor": "#101427"
       },
-      "edgeToEdgeEnabled": true,
-      "permissions": [
-        "ACCESS_COARSE_LOCATION",
-        "ACCESS_FINE_LOCATION"
-      ]
+      "edgeToEdgeEnabled": true
     },
     "web": {
       "favicon": "./assets/favicon.png",
-      "bundler": "metro"
+      "bundler": "metro",
+      "output": "static"
     },
     "plugins": [
-      "expo-router",
-      "expo-location"
+      "expo-router"
     ],
-    "scheme": "freetourai",
-    "experiments": {
-      "typedRoutes": true
-    }
+    "scheme": "pixelmonfriends"
   }
 }
