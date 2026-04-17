@@ -119,4 +119,5 @@ export interface NearbyMatch {
 export interface AppStateSnapshot {
   user: UserProfile
   preferences: UserPreferences
+  activeRoute?: PlannedRoute | null
 }

@@ -34,6 +34,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
       set({
         user: snapshot.user,
         preferences: snapshot.preferences,
+        activeRoute: snapshot.activeRoute ?? null,
         hydrated: true,
       })
       return
@@ -60,7 +61,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
   }),
   createRoute: (minutes) => {
     const route = buildRoute(get().preferences, minutes)
-    set({ activeRoute: route })
+    persist(set, get, { activeRoute: route })
     return route
   },
 }))
@@ -75,5 +76,6 @@ function persist(
   saveSnapshot({
     user: state.user,
     preferences: state.preferences,
+    activeRoute: state.activeRoute,
   })
 }

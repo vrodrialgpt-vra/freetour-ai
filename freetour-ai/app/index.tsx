@@ -1,6 +1,6 @@
 import { router } from 'expo-router'
-import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
-import { Card, EmptyState, HeroCard, PrimaryButton, Screen, Section, SecondaryButton } from '../src/components/ui'
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Card, EmptyState, HeroCard, PoiImage, PrimaryButton, Screen, Section, SecondaryButton } from '../src/components/ui'
 import { colors } from '../src/constants/theme'
 import { cities } from '../src/data/pois'
 import { useBoot } from '../src/hooks/useBoot'
@@ -13,13 +13,14 @@ export default function HomeScreen() {
   const activeRoute = useAppStore((state) => state.activeRoute)
   const pois = useAppStore((state) => state.pois)
   const city = cities[0]
+  const favourites = pois.filter((poi) => user.favouritePoiIds.includes(poi.id))
 
   if (!hydrated) {
     return (
       <Screen>
         <Card>
-          <Text style={styles.title}>Preparando tu guía…</Text>
-          <Text style={styles.text}>Cargamos tu ruta, tus favoritos y tu estilo de visita.</Text>
+          <Text style={styles.title}>Cargando una versión mejor…</Text>
+          <Text style={styles.text}>Estamos recuperando tus preferencias, guardados y última ruta.</Text>
         </Card>
       </Screen>
     )
@@ -29,14 +30,14 @@ export default function HomeScreen() {
     return (
       <Screen>
         <HeroCard
-          title="Descubre la ciudad sin pensar demasiado"
-          subtitle="Configura tu estilo en un minuto y deja que la app te sugiera qué ver, cuándo parar y qué merece la pena."
-          ctaLabel="Empezar"
+          title="Explora Barcelona como si alguien te guiara bien"
+          subtitle="Una guía bonita, simple y útil para decidir rápido qué ver, qué escuchar y por dónde seguir."
+          ctaLabel="Configurar en 1 minuto"
           onPress={() => router.push('/onboarding')}
         />
         <Card>
-          <Text style={styles.title}>Empieza fácil</Text>
-          <Text style={styles.text}>Elige idioma, activa ubicación y ya tienes una guía mucho más útil que una lista suelta de sitios.</Text>
+          <Text style={styles.title}>Nada de listas secas</Text>
+          <Text style={styles.text}>Aquí tienes rutas, fichas visuales, consejos prácticos y explicaciones por voz, todo pensado para usarlo caminando.</Text>
         </Card>
       </Screen>
     )
@@ -45,73 +46,87 @@ export default function HomeScreen() {
   return (
     <Screen scroll>
       <HeroCard
-        title={`Tu guía de ${city.name}`}
-        subtitle="Bonita, rápida y pensada para decidir qué hacer en segundos mientras paseas por la ciudad."
-        ctaLabel="Empezar a explorar"
+        title={`Descubre ${city.name} sin complicarte`}
+        subtitle="Te recomiendo sitios, te explico lo importante y te dejo guardar tu plan para que no se pierda al cerrar la web."
+        ctaLabel="Empezar paseo"
         onPress={() => router.push('/walk')}
       />
 
-      <Section title="Haz algo ya" subtitle="Todo lo importante, claro y a un toque.">
-        <View style={styles.grid}>
-          <QuickAction emoji="🎧" title="Modo paseo" subtitle={preferences.audioMode === 'auto' ? 'Guía automática' : 'Guía manual'} onPress={() => router.push('/walk')} />
-          <QuickAction emoji="🗺️" title="Crear ruta" subtitle="Según tu tiempo" onPress={() => router.push('/route-planner')} />
-          <QuickAction emoji="⭐" title="Guardados" subtitle={`${user.favouritePoiIds.length} favoritos`} onPress={() => router.push('/settings')} />
-          <QuickAction emoji="⚙️" title="Tu estilo" subtitle="Audio, idioma y ritmo" onPress={() => router.push('/settings')} />
+      <View style={styles.statsRow}>
+        <MiniStat label="Guardados" value={`${user.favouritePoiIds.length}`} />
+        <MiniStat label="Visitados" value={`${user.visitedPoiIds.length}`} />
+        <MiniStat label="Idioma" value={preferences.language === 'es' ? 'ES' : 'EN'} />
+      </View>
+
+      <Section title="Haz algo ahora" subtitle="Tres caminos claros, sin pantallas raras.">
+        <View style={styles.actionGrid}>
+          <ActionTile emoji="🎧" title="Paseo guiado" subtitle="La app te acompaña mientras caminas" onPress={() => router.push('/walk')} />
+          <ActionTile emoji="🗺️" title="Crear ruta" subtitle="Según tu tiempo disponible" onPress={() => router.push('/route-planner')} />
+          <ActionTile emoji="⚙️" title="Ajustes" subtitle="Tu estilo, audio y preferencias" onPress={() => router.push('/settings')} />
         </View>
       </Section>
 
-      <Section title="Sitios que sí apetecen" subtitle="Con imagen, gancho y acceso directo a la ficha.">
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.horizontalList}>
+      <Section title="Imprescindibles bonitos" subtitle="Ahora sí, con imagen fiable y ficha útil.">
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.carousel}>
           {pois.slice(0, 4).map((poi) => (
             <Pressable key={poi.id} style={styles.poiCard} onPress={() => router.push({ pathname: '/poi/[id]', params: { id: poi.id } } as any)}>
-              {poi.imageUrl ? <Image source={{ uri: poi.imageUrl }} style={styles.poiImage} resizeMode="cover" /> : null}
-              <View style={styles.poiCardBody}>
-                <Text style={styles.poiCardTitle}>{poi.name}</Text>
-                <Text style={styles.poiCardSubtitle}>{poi.subtitle}</Text>
-                <Text numberOfLines={2} style={styles.poiCardText}>{poi.hook}</Text>
+              <PoiImage uri={poi.imageUrl} emoji="📸" height={160} rounded={20} />
+              <View style={styles.poiBody}>
+                <Text style={styles.poiTitle}>{poi.name}</Text>
+                <Text style={styles.poiSubtitle}>{poi.subtitle}</Text>
+                <Text style={styles.poiHook} numberOfLines={2}>{poi.hook}</Text>
               </View>
             </Pressable>
           ))}
         </ScrollView>
       </Section>
 
-      <Section title="Tu plan" subtitle="Nada de cajas raras ni pantallas sin salida.">
+      <Section title="Tu plan guardado" subtitle="Para seguir donde lo dejaste.">
         <Card>
           {activeRoute ? (
             <>
               <Text style={styles.title}>{activeRoute.title}</Text>
-              <Text style={styles.text}>{activeRoute.stops.length} paradas, {activeRoute.totalMinutes} min y recorrido listo para seguir.</Text>
+              <Text style={styles.text}>{activeRoute.stops.length} paradas, {activeRoute.totalMinutes} min y se conserva aunque cierres y vuelvas.</Text>
               <View style={styles.buttonGap}>
                 <PrimaryButton label="Abrir mi ruta" onPress={() => router.push('/route-planner')} />
-                <SecondaryButton label="Salir a pasear" onPress={() => router.push('/walk')} />
+                <SecondaryButton label="Ir al paseo" onPress={() => router.push('/walk')} />
               </View>
             </>
           ) : (
             <EmptyState
               emoji="✨"
-              title="Todavía no tienes una ruta hecha"
-              subtitle="Dinos cuánto tiempo tienes y te montamos una ruta clara, bonita y caminable en segundos."
-              action={<PrimaryButton label="Crear ruta ahora" onPress={() => router.push('/route-planner')} />}
+              title="Aún no tienes una ruta guardada"
+              subtitle="La próxima que generes se queda guardada para que no sientas la app como algo frágil o temporal."
+              action={<PrimaryButton label="Crear mi ruta" onPress={() => router.push('/route-planner')} />}
             />
           )}
         </Card>
       </Section>
 
-      <Section title="Tu experiencia, a tu manera" subtitle="Para que la app se sienta más personal y menos genérica.">
+      <Section title="Tus guardados" subtitle="Lo que te llamó la atención, a mano.">
         <Card>
-          <View style={styles.preferenceRow}><Text style={styles.preferenceLabel}>Idioma</Text><Text style={styles.preferenceValue}>{preferences.language === 'es' ? 'Español' : 'English'}</Text></View>
-          <View style={styles.preferenceRow}><Text style={styles.preferenceLabel}>Narración</Text><Text style={styles.preferenceValue}>{translateStyle(preferences.narrativeStyle)}</Text></View>
-          <View style={styles.preferenceRow}><Text style={styles.preferenceLabel}>Profundidad</Text><Text style={styles.preferenceValue}>{translateDepth(preferences.depth)}</Text></View>
-          <SecondaryButton label="Cambiar preferencias" onPress={() => router.push('/settings')} />
+          {favourites.length ? (
+            favourites.slice(0, 3).map((poi) => (
+              <Pressable key={poi.id} style={styles.savedRow} onPress={() => router.push({ pathname: '/poi/[id]', params: { id: poi.id } } as any)}>
+                <Text style={styles.savedBullet}>★</Text>
+                <View style={styles.savedCopy}>
+                  <Text style={styles.savedTitle}>{poi.name}</Text>
+                  <Text style={styles.savedText}>{poi.subtitle}</Text>
+                </View>
+              </Pressable>
+            ))
+          ) : (
+            <Text style={styles.text}>Todavía no has guardado sitios. Cuando lo hagas, aparecerán aquí.</Text>
+          )}
         </Card>
       </Section>
     </Screen>
   )
 }
 
-function QuickAction({ emoji, title, subtitle, onPress }: { emoji: string; title: string; subtitle: string; onPress: () => void }) {
+function ActionTile({ emoji, title, subtitle, onPress }: { emoji: string; title: string; subtitle: string; onPress: () => void }) {
   return (
-    <Pressable style={styles.actionCard} onPress={onPress}>
+    <Pressable style={styles.actionTile} onPress={onPress}>
       <Text style={styles.actionEmoji}>{emoji}</Text>
       <Text style={styles.actionTitle}>{title}</Text>
       <Text style={styles.actionSubtitle}>{subtitle}</Text>
@@ -119,52 +134,37 @@ function QuickAction({ emoji, title, subtitle, onPress }: { emoji: string; title
   )
 }
 
-function translateStyle(style: string) {
-  const map: Record<string, string> = {
-    dynamic: 'Dinámico',
-    classic: 'Clásico',
-    family: 'Familiar',
-    premium: 'Cultural',
-    brief: 'Breve',
-    curious: 'Curioso',
-  }
-  return map[style] ?? style
-}
-
-function translateDepth(depth: string) {
-  const map: Record<string, string> = {
-    short: 'Muy breve',
-    standard: 'Estándar',
-    expanded: 'Ampliado',
-  }
-  return map[depth] ?? depth
+function MiniStat({ label, value }: { label: string; value: string }) {
+  return (
+    <View style={styles.statCard}>
+      <Text style={styles.statValue}>{value}</Text>
+      <Text style={styles.statLabel}>{label}</Text>
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
-  horizontalList: { gap: 12, paddingRight: 12 },
-  poiCard: { width: 250, backgroundColor: colors.card, borderRadius: 22, overflow: 'hidden', borderWidth: 1, borderColor: colors.border },
-  poiImage: { width: '100%', height: 140 },
-  poiCardBody: { padding: 14, gap: 6 },
-  poiCardTitle: { fontSize: 17, fontWeight: '800', color: colors.ink },
-  poiCardSubtitle: { color: colors.primaryDark, fontWeight: '700' },
-  poiCardText: { color: colors.inkSoft, lineHeight: 19 },
-  actionCard: {
-    width: '47%',
-    backgroundColor: colors.card,
-    borderRadius: 22,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: colors.border,
-    gap: 8,
-  },
+  statsRow: { flexDirection: 'row', gap: 10 },
+  statCard: { flex: 1, backgroundColor: colors.card, borderRadius: 18, padding: 14, borderWidth: 1, borderColor: colors.border, gap: 2 },
+  statValue: { fontSize: 20, fontWeight: '900', color: colors.ink },
+  statLabel: { color: colors.inkMuted, fontWeight: '700' },
+  actionGrid: { gap: 12 },
+  actionTile: { backgroundColor: colors.card, borderRadius: 24, padding: 18, borderWidth: 1, borderColor: colors.border, gap: 8 },
   actionEmoji: { fontSize: 24 },
-  actionTitle: { fontSize: 16, fontWeight: '800', color: colors.ink },
-  actionSubtitle: { color: colors.inkSoft, lineHeight: 18 },
+  actionTitle: { fontSize: 18, fontWeight: '800', color: colors.ink },
+  actionSubtitle: { color: colors.inkSoft, lineHeight: 20 },
+  carousel: { gap: 12, paddingRight: 12 },
+  poiCard: { width: 280, backgroundColor: colors.card, borderRadius: 24, padding: 10, borderWidth: 1, borderColor: colors.border, gap: 12 },
+  poiBody: { gap: 4, paddingHorizontal: 2, paddingBottom: 4 },
+  poiTitle: { fontSize: 18, fontWeight: '800', color: colors.ink },
+  poiSubtitle: { color: colors.primaryDark, fontWeight: '700' },
+  poiHook: { color: colors.inkSoft, lineHeight: 20 },
   title: { fontSize: 21, fontWeight: '900', color: colors.ink },
   text: { color: colors.inkSoft, lineHeight: 21 },
   buttonGap: { gap: 10 },
-  preferenceRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 2 },
-  preferenceLabel: { color: colors.inkMuted, fontWeight: '700' },
-  preferenceValue: { color: colors.ink, fontWeight: '800' },
+  savedRow: { flexDirection: 'row', gap: 10, alignItems: 'center', paddingVertical: 6 },
+  savedBullet: { color: colors.sun, fontSize: 18 },
+  savedCopy: { flex: 1, gap: 2 },
+  savedTitle: { fontWeight: '800', color: colors.ink },
+  savedText: { color: colors.inkSoft },
 })

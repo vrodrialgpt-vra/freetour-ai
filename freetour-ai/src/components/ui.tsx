@@ -1,5 +1,5 @@
-import { PropsWithChildren } from 'react'
-import { Pressable, ScrollView, StyleSheet, Text, View, ViewStyle } from 'react-native'
+import { PropsWithChildren, useState } from 'react'
+import { Image, Pressable, ScrollView, StyleSheet, Text, View, ViewStyle } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { colors, spacing } from '../constants/theme'
 
@@ -30,6 +30,20 @@ export function HeroCard({ title, subtitle, ctaLabel, onPress }: { title: string
       ) : null}
     </LinearGradient>
   )
+}
+
+export function PoiImage({ uri, emoji = '📍', height = 180, rounded = 22 }: { uri?: string; emoji?: string; height?: number; rounded?: number }) {
+  const [failed, setFailed] = useState(false)
+
+  if (!uri || failed) {
+    return (
+      <LinearGradient colors={[colors.cardMuted, '#EEF3FF', colors.blush]} style={[styles.imageFallback, { height, borderRadius: rounded }]}>
+        <Text style={styles.imageFallbackEmoji}>{emoji}</Text>
+      </LinearGradient>
+    )
+  }
+
+  return <Image source={{ uri }} style={{ width: '100%', height, borderRadius: rounded }} resizeMode="cover" onError={() => setFailed(true)} />
 }
 
 export function Section({ title, subtitle, children }: PropsWithChildren<{ title: string; subtitle?: string }>) {
@@ -109,6 +123,8 @@ const styles = StyleSheet.create({
   heroSubtitle: { color: 'rgba(255,255,255,0.92)', fontSize: 15, lineHeight: 22 },
   cta: { alignSelf: 'flex-start', backgroundColor: '#fff', paddingHorizontal: 18, paddingVertical: 12, borderRadius: 999, marginTop: 6 },
   ctaText: { color: colors.primaryDark, fontWeight: '800' },
+  imageFallback: { width: '100%', alignItems: 'center', justifyContent: 'center' },
+  imageFallbackEmoji: { fontSize: 42 },
   section: { gap: spacing.sm },
   sectionHead: { gap: 3 },
   sectionTitle: { fontSize: 24, fontWeight: '900', color: colors.ink },
