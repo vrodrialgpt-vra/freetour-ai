@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
-import { router } from 'expo-router'
+import { Image, Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import { Card, Field, Pill, Screen, Subtitle, Title, BigButton } from '../src/components/GameUI'
+import { goTo, openRoute } from '../src/lib/navigation'
 import { starterCards, useGameStore } from '../src/store/gameStore'
 
 export default function HomeScreen() {
@@ -14,7 +14,7 @@ export default function HomeScreen() {
   const [starter, setStarter] = useState(profile.starter || starterCards[0].name)
   const [avatarHue, setAvatarHue] = useState(profile.avatarHue)
 
-  const ready = useMemo(() => name.trim().length > 0, [name])
+  const normalizedName = useMemo(() => name.trim() || 'Entrenador', [name])
 
   if (!hydrated) {
     return (
@@ -38,7 +38,7 @@ export default function HomeScreen() {
             label="Seguir partida"
             onPress={() => {
               setScreen('world')
-              router.replace('/world' as never)
+              goTo('/world')
             }}
           />
         </Card>
@@ -67,9 +67,15 @@ export default function HomeScreen() {
         <Text style={styles.label}>Color</Text>
         <View style={styles.row}>
           {['#7DD3FC', '#F9A8D4', '#FCD34D', '#86EFAC'].map((color) => (
-            <Pressable key={color} onPress={() => setAvatarHue(color)} style={({ pressed }) => [styles.colorDot, { backgroundColor: color }, avatarHue === color && styles.colorDotActive, pressed && styles.pressedChoice]}>
-              {avatarHue === color ? <Text style={styles.choiceCheck}>✓</Text> : null}
-            </Pressable>
+            Platform.OS === 'web' ? (
+              <button key={color} onClick={() => setAvatarHue(color)} style={{ width: 46, height: 46, borderRadius: 999, border: avatarHue === color ? '3px solid white' : '3px solid transparent', backgroundColor: color, cursor: 'pointer' }}>
+                {avatarHue === color ? '✓' : ''}
+              </button>
+            ) : (
+              <Pressable key={color} onPress={() => setAvatarHue(color)} style={({ pressed }) => [styles.colorDot, { backgroundColor: color }, avatarHue === color && styles.colorDotActive, pressed && styles.pressedChoice]}>
+                {avatarHue === color ? <Text style={styles.choiceCheck}>✓</Text> : null}
+              </Pressable>
+            )
           ))}
         </View>
       </Card>
@@ -79,7 +85,13 @@ export default function HomeScreen() {
         <View style={styles.grid}>
           {starterCards.map((card) => {
             const selected = starter === card.name
-            return (
+            return Platform.OS === 'web' ? (
+              <button key={card.name} onClick={() => setStarter(card.name)} style={{ width: '47%', minHeight: 164, borderRadius: 20, border: `2px solid ${selected ? card.color : 'transparent'}`, background: 'rgba(255,255,255,0.12)', cursor: 'pointer' }}>
+                <Image source={{ uri: card.sprite }} style={styles.sprite} />
+                <Text style={styles.cardName}>{card.name}</Text>
+                <Text style={[styles.cardMeta, selected && { color: '#fff' }]}>{selected ? 'Elegido' : 'Toca para elegir'}</Text>
+              </button>
+            ) : (
               <Pressable key={card.name} onPress={() => setStarter(card.name)} style={({ pressed }) => [styles.starterCard, selected && { borderColor: card.color, transform: [{ scale: 1.02 }] }, pressed && styles.pressedChoice]}>
                 <Image source={{ uri: card.sprite }} style={styles.sprite} />
                 <Text style={styles.cardName}>{card.name}</Text>
@@ -90,10 +102,9 @@ export default function HomeScreen() {
         </View>
         <BigButton
           label="Empezar aventura"
-          disabled={!ready}
           onPress={() => {
-            createProfile({ name: name.trim(), age: age.trim() || '6', starter, avatarHue })
-            router.replace('/world' as never)
+            createProfile({ name: normalizedName, age: age.trim() || '6', starter, avatarHue })
+            goTo('/world')
           }}
           color="#FF8A5C"
         />

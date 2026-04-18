@@ -1,6 +1,6 @@
 import { ReactNode, useState } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
-import { Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Image, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 
 export function Screen({ children }: { children: ReactNode }) {
   return (
@@ -31,6 +31,13 @@ export function Pill({ label, color = '#6DDC7B' }: { label: string; color?: stri
 }
 
 export function BigButton({ label, onPress, color = '#5D7CFF', disabled = false }: { label: string; onPress: () => void; color?: string; disabled?: boolean }) {
+  if (Platform.OS === 'web') {
+    return (
+      <button disabled={disabled} onClick={onPress} style={{ backgroundColor: disabled ? '#55607E' : color, opacity: disabled ? 0.5 : 1, color: '#fff', fontSize: 18, fontWeight: 900, borderRadius: 20, minHeight: 56, border: 'none', width: '100%', cursor: disabled ? 'not-allowed' : 'pointer' }}>
+        {label}
+      </button>
+    )
+  }
   return (
     <Pressable onPress={onPress} disabled={disabled} style={({ pressed }) => [styles.button, { backgroundColor: disabled ? '#55607E' : color, opacity: disabled ? 0.5 : pressed ? 0.88 : 1, transform: [{ scale: pressed ? 0.985 : 1 }] }]}>
       <Text style={styles.buttonText}>{label}</Text>
@@ -39,6 +46,13 @@ export function BigButton({ label, onPress, color = '#5D7CFF', disabled = false 
 }
 
 export function SmallButton({ label, onPress, color = '#2C365A', textColor = '#F8FAFF' }: { label: string; onPress: () => void; color?: string; textColor?: string }) {
+  if (Platform.OS === 'web') {
+    return (
+      <button onClick={onPress} style={{ backgroundColor: color, color: textColor, fontWeight: 800, fontSize: 14, borderRadius: 16, minHeight: 48, border: 'none', width: '100%', cursor: 'pointer' }}>
+        {label}
+      </button>
+    )
+  }
   return (
     <Pressable onPress={onPress} style={({ pressed }) => [styles.smallButton, { backgroundColor: color, opacity: pressed ? 0.88 : 1, transform: [{ scale: pressed ? 0.985 : 1 }] }]}>
       <Text style={[styles.smallButtonText, { color: textColor }]}>{label}</Text>
