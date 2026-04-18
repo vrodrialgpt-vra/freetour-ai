@@ -36,7 +36,7 @@ export default function BagScreen() {
         active="bag"
         items={[
           { key: 'world', label: 'Map', onPress: () => { setScreen('world'); router.replace('/world' as never) } },
-          { key: 'battle', label: 'Battle', onPress: () => { setScreen('battle'); router.replace('/battle' as never) } },
+          { key: 'battle', label: 'Battle', disabled: inventory['spark-ball'] <= 0 && inventory.berry <= 0, onPress: () => { setScreen('battle'); router.replace('/battle' as never) } },
           { key: 'team', label: 'Team', onPress: () => { setScreen('team'); router.replace('/team' as never) } },
           { key: 'bag', label: 'Bag', onPress: () => {} },
           { key: 'profile', label: 'Profile', onPress: () => { setScreen('profile'); router.replace('/profile' as never) } },

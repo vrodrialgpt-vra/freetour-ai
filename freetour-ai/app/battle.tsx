@@ -67,7 +67,7 @@ export default function BattleScreen() {
           <SmallButton label="Rainbow hit" onPress={attackWild} color="#5D7CFF" />
           <SmallButton label={`Berry (${inventory.berry})`} onPress={() => useItem('berry')} color="#6DDC7B" textColor="#11203B" />
           <SmallButton label={`Spark Ball (${inventory['spark-ball']})`} onPress={throwBall} color="#FFD84D" textColor="#16203A" />
-          <SmallButton label="Run" onPress={fleeBattle} color="#FF8A5C" />
+          <SmallButton label="Run to map" onPress={fleeBattle} color="#FF8A5C" />
         </View>
       </Card>
 

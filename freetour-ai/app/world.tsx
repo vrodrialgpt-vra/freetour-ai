@@ -9,7 +9,7 @@ import { useGameStore } from '../src/store/gameStore'
 const size = 5
 
 export default function WorldScreen() {
-  const { profile, world, party, inventory, lastToast, battle, activeScreen, moveHero, setScreen } = useGameStore((s) => ({
+  const { profile, world, party, inventory, lastToast, battle, activeScreen, moveHero, setScreen, startEncounter } = useGameStore((s) => ({
     profile: s.profile,
     world: s.world,
     party: s.party,
@@ -19,6 +19,7 @@ export default function WorldScreen() {
     activeScreen: s.activeScreen,
     moveHero: s.moveHero,
     setScreen: s.setScreen,
+    startEncounter: s.startEncounter,
   }))
 
   useEffect(() => {
@@ -61,12 +62,14 @@ export default function WorldScreen() {
           })}
         </View>
         <View style={styles.controls}>
-          <SmallButton label="⬆" onPress={() => moveHero(0, -1)} />
+          <Text style={styles.controlsTitle}>Walk around</Text>
+          <SmallButton label="⬆ Up" onPress={() => moveHero(0, -1)} />
           <View style={styles.controlRow}>
-            <SmallButton label="⬅" onPress={() => moveHero(-1, 0)} />
-            <SmallButton label="➡" onPress={() => moveHero(1, 0)} />
+            <SmallButton label="⬅ Left" onPress={() => moveHero(-1, 0)} />
+            <SmallButton label="➡ Right" onPress={() => moveHero(1, 0)} />
           </View>
-          <SmallButton label="⬇" onPress={() => moveHero(0, 1)} />
+          <SmallButton label="⬇ Down" onPress={() => moveHero(0, 1)} />
+          <SmallButton label="Start a battle now" onPress={startEncounter} color="#FF8A5C" />
         </View>
       </Card>
 
@@ -79,7 +82,7 @@ export default function WorldScreen() {
         active="world"
         items={[
           { key: 'world', label: 'Map', onPress: () => { setScreen('world'); router.replace('/world' as never) } },
-          { key: 'battle', label: 'Battle', onPress: () => { setScreen('battle'); router.replace('/battle' as never) } },
+          { key: 'battle', label: 'Battle', disabled: !battle, onPress: () => { setScreen('battle'); router.replace('/battle' as never) } },
           { key: 'team', label: 'Team', onPress: () => { setScreen('team'); router.replace('/team' as never) } },
           { key: 'bag', label: 'Bag', onPress: () => { setScreen('bag'); router.replace('/bag' as never) } },
           { key: 'profile', label: 'Profile', onPress: () => { setScreen('profile'); router.replace('/profile' as never) } },
@@ -97,7 +100,8 @@ const styles = StyleSheet.create({
   map: { width: '100%', aspectRatio: 1, flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
   tile: { width: '18.4%', aspectRatio: 1, borderRadius: 16, alignItems: 'center', justifyContent: 'center' },
   tileText: { fontSize: 22 },
-  controls: { gap: 10, alignItems: 'center' },
+  controls: { gap: 10, alignItems: 'stretch' },
+  controlsTitle: { color: '#fff', fontWeight: '900', fontSize: 18, textAlign: 'center' },
   controlRow: { flexDirection: 'row', gap: 10 },
   toast: { color: '#fff', fontWeight: '900', fontSize: 18 },
   meta: { color: '#E6EBFF', fontWeight: '700' },

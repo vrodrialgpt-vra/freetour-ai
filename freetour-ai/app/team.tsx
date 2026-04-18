@@ -47,7 +47,7 @@ export default function TeamScreen() {
         active="team"
         items={[
           { key: 'world', label: 'Map', onPress: () => { setScreen('world'); router.replace('/world' as never) } },
-          { key: 'battle', label: 'Battle', onPress: () => { setScreen('battle'); router.replace('/battle' as never) } },
+          { key: 'battle', label: 'Battle', disabled: party.every((p) => p.currentHp <= 0), onPress: () => { setScreen('battle'); router.replace('/battle' as never) } },
           { key: 'team', label: 'Team', onPress: () => {} },
           { key: 'bag', label: 'Bag', onPress: () => { setScreen('bag'); router.replace('/bag' as never) } },
           { key: 'profile', label: 'Profile', onPress: () => { setScreen('profile'); router.replace('/profile' as never) } },
