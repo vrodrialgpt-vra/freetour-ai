@@ -88,7 +88,7 @@ const initialWorld = (): WorldState => ({
 })
 
 const initialState = {
-  hydrated: Platform.OS === 'web',
+  hydrated: false,
   activeScreen: 'home' as ScreenKey,
   profile: initialProfile,
   settings: { soundOn: true, voiceOn: true, hapticsOn: true },
@@ -337,6 +337,7 @@ export const useGameStore = create<GameState>()(
         battle: state.battle,
         lastToast: state.lastToast,
       }),
+      skipHydration: true,
       onRehydrateStorage: () => (state, error) => {
         if (error) {
           console.warn('Failed to hydrate save storage', error)

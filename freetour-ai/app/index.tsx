@@ -1,8 +1,15 @@
 import { useMemo, useState } from 'react'
-import { Image, Platform, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import { Card, Field, Pill, Screen, Subtitle, Title, BigButton } from '../src/components/GameUI'
-import { goTo, openRoute } from '../src/lib/navigation'
+import { goTo } from '../src/lib/navigation'
 import { starterCards, useGameStore } from '../src/store/gameStore'
+
+const starterEmoji: Record<string, string> = {
+  Bulbasaur: '🌿',
+  Charmander: '🔥',
+  Squirtle: '💧',
+  Pikachu: '⚡',
+}
 
 export default function HomeScreen() {
   const hydrated = useGameStore((s) => s.hydrated)
@@ -15,6 +22,13 @@ export default function HomeScreen() {
   const [avatarHue, setAvatarHue] = useState(profile.avatarHue)
 
   const normalizedName = useMemo(() => name.trim() || 'Entrenador', [name])
+  const colorOptions = [
+    { value: '#7DD3FC', label: 'Azul' },
+    { value: '#F9A8D4', label: 'Rosa' },
+    { value: '#FCD34D', label: 'Amarillo' },
+    { value: '#86EFAC', label: 'Verde' },
+  ]
+  const selectedColorLabel = colorOptions.find((option) => option.value === avatarHue)?.label || 'Azul'
 
   if (!hydrated) {
     return (
@@ -65,15 +79,16 @@ export default function HomeScreen() {
         <Text style={styles.label}>Edad</Text>
         <Field value={age} onChangeText={setAge} placeholder="6" width={100} />
         <Text style={styles.label}>Color</Text>
+        <Text style={styles.helper}>Color elegido: {selectedColorLabel}</Text>
         <View style={styles.row}>
-          {['#7DD3FC', '#F9A8D4', '#FCD34D', '#86EFAC'].map((color) => (
+          {colorOptions.map((option) => (
             Platform.OS === 'web' ? (
-              <button key={color} onClick={() => setAvatarHue(color)} style={{ width: 46, height: 46, borderRadius: 999, border: avatarHue === color ? '3px solid white' : '3px solid transparent', backgroundColor: color, cursor: 'pointer' }}>
-                {avatarHue === color ? '✓' : ''}
+              <button key={option.value} onClick={() => setAvatarHue(option.value)} style={{ minWidth: 84, height: 52, borderRadius: 16, border: avatarHue === option.value ? '3px solid white' : '3px solid transparent', backgroundColor: option.value, cursor: 'pointer', fontWeight: 900, color: '#16203A' }}>
+                {avatarHue === option.value ? `✓ ${option.label}` : option.label}
               </button>
             ) : (
-              <Pressable key={color} onPress={() => setAvatarHue(color)} style={({ pressed }) => [styles.colorDot, { backgroundColor: color }, avatarHue === color && styles.colorDotActive, pressed && styles.pressedChoice]}>
-                {avatarHue === color ? <Text style={styles.choiceCheck}>✓</Text> : null}
+              <Pressable key={option.value} onPress={() => setAvatarHue(option.value)} style={({ pressed }) => [styles.colorPill, { backgroundColor: option.value }, avatarHue === option.value && styles.colorPillActive, pressed && styles.pressedChoice]}>
+                <Text style={styles.colorPillText}>{avatarHue === option.value ? `✓ ${option.label}` : option.label}</Text>
               </Pressable>
             )
           ))}
@@ -86,16 +101,24 @@ export default function HomeScreen() {
           {starterCards.map((card) => {
             const selected = starter === card.name
             return Platform.OS === 'web' ? (
-              <button key={card.name} onClick={() => setStarter(card.name)} style={{ width: '47%', minHeight: 164, borderRadius: 20, border: `2px solid ${selected ? card.color : 'transparent'}`, background: 'rgba(255,255,255,0.12)', cursor: 'pointer' }}>
-                <Image source={{ uri: card.sprite }} style={styles.sprite} />
+              <button key={card.name} onClick={() => setStarter(card.name)} style={{ width: '47%', minHeight: 184, borderRadius: 20, border: `3px solid ${selected ? card.color : 'transparent'}`, background: selected ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.12)', cursor: 'pointer', padding: 12 }}>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 8 }}>
+                  <View style={[styles.starterBadge, { borderColor: card.color, backgroundColor: `${card.color}22` }]}>
+                    <Text style={[styles.starterBadgeEmoji, { color: card.color }]}>{starterEmoji[card.name] || '✨'}</Text>
+                    <Text style={styles.starterBadgeLetter}>{card.name.slice(0, 1)}</Text>
+                  </View>
+                </div>
                 <Text style={styles.cardName}>{card.name}</Text>
-                <Text style={[styles.cardMeta, selected && { color: '#fff' }]}>{selected ? 'Elegido' : 'Toca para elegir'}</Text>
+                <Text style={[styles.cardMeta, selected && { color: '#fff' }]}>{selected ? '✓ Elegido' : 'Toca para elegir'}</Text>
               </button>
             ) : (
-              <Pressable key={card.name} onPress={() => setStarter(card.name)} style={({ pressed }) => [styles.starterCard, selected && { borderColor: card.color, transform: [{ scale: 1.02 }] }, pressed && styles.pressedChoice]}>
-                <Image source={{ uri: card.sprite }} style={styles.sprite} />
+              <Pressable key={card.name} onPress={() => setStarter(card.name)} style={({ pressed }) => [styles.starterCard, selected && { borderColor: card.color, transform: [{ scale: 1.02 }], backgroundColor: 'rgba(255,255,255,0.18)' }, pressed && styles.pressedChoice]}>
+                <View style={[styles.starterBadge, { borderColor: card.color, backgroundColor: `${card.color}22` }]}>
+                  <Text style={[styles.starterBadgeEmoji, { color: card.color }]}>{starterEmoji[card.name] || '✨'}</Text>
+                  <Text style={styles.starterBadgeLetter}>{card.name.slice(0, 1)}</Text>
+                </View>
                 <Text style={styles.cardName}>{card.name}</Text>
-                <Text style={[styles.cardMeta, selected && { color: '#fff' }]}>{selected ? 'Elegido' : 'Toca para elegir'}</Text>
+                <Text style={[styles.cardMeta, selected && { color: '#fff' }]}>{selected ? '✓ Elegido' : 'Toca para elegir'}</Text>
               </Pressable>
             )
           })}
@@ -119,13 +142,16 @@ const styles = StyleSheet.create({
   tipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   tipBubble: { backgroundColor: 'rgba(7,17,30,0.14)', borderRadius: 999, paddingHorizontal: 10, paddingVertical: 6 },
   tipText: { color: '#16203A', fontWeight: '800', fontSize: 12 },
-  colorDot: { width: 46, height: 46, borderRadius: 999, borderWidth: 3, borderColor: 'transparent', alignItems: 'center', justifyContent: 'center' },
-  colorDotActive: { borderColor: '#fff' },
-  choiceCheck: { color: '#16203A', fontWeight: '900', fontSize: 18 },
+  helper: { color: '#D7E4FF', fontWeight: '700', marginTop: -4 },
+  colorPill: { minWidth: 84, minHeight: 52, borderRadius: 16, borderWidth: 3, borderColor: 'transparent', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 10 },
+  colorPillActive: { borderColor: '#fff' },
+  colorPillText: { color: '#16203A', fontWeight: '900', fontSize: 14 },
   pressedChoice: { opacity: 0.86 },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, justifyContent: 'space-between' },
-  starterCard: { width: '47%', backgroundColor: 'rgba(255,255,255,0.12)', borderRadius: 20, padding: 12, alignItems: 'center', borderWidth: 2, borderColor: 'transparent', gap: 6, minHeight: 164 },
-  sprite: { width: 94, height: 94 },
+  starterCard: { width: '47%', backgroundColor: 'rgba(255,255,255,0.12)', borderRadius: 20, padding: 12, alignItems: 'center', borderWidth: 3, borderColor: 'transparent', gap: 8, minHeight: 184 },
+  starterBadge: { width: 96, height: 96, borderRadius: 48, borderWidth: 3, alignItems: 'center', justifyContent: 'center', position: 'relative' },
+  starterBadgeEmoji: { fontSize: 34, fontWeight: '900' },
+  starterBadgeLetter: { color: '#fff', fontWeight: '900', fontSize: 26, position: 'absolute', bottom: 10, right: 18 },
   cardName: { color: '#fff', fontWeight: '900', fontSize: 16 },
   cardMeta: { color: '#D7E4FF', fontWeight: '800', fontSize: 12 },
 })
