@@ -9,37 +9,37 @@ export default function BagScreen() {
   return (
     <Screen>
       <Card color="#FFD84D">
-        <Pill label="Backpack" color="#FFD84D" />
-        <Title>Magic pockets</Title>
-        <Subtitle>Use berries during battles, or potions anytime to heal the whole squad.</Subtitle>
+        <Pill label="Mochila" color="#FFD84D" />
+        <Title>Bolsillo mágico</Title>
+        <Subtitle>Usa bayas en combate, o pociones para curar a todo el equipo.</Subtitle>
       </Card>
 
       <Card color="#6DDC7B">
         <View style={styles.itemCard}>
-          <Text style={styles.itemTitle}>Berry</Text>
-          <Text style={styles.itemText}>Quick heal for the active buddy.</Text>
-          <SmallButton label={`Use now (${inventory.berry})`} onPress={() => useItem('berry')} color="#6DDC7B" textColor="#102038" />
+          <Text style={styles.itemTitle}>Baya</Text>
+          <Text style={styles.itemText}>Cura rápida para el compañero activo.</Text>
+          <SmallButton label={`Usar ahora (${inventory.berry})`} onPress={() => useItem('berry')} color="#6DDC7B" textColor="#102038" />
         </View>
         <View style={styles.itemCard}>
-          <Text style={styles.itemTitle}>Spark Ball</Text>
-          <Text style={styles.itemText}>Catch a wild friend during battle.</Text>
-          <Text style={styles.count}>Owned: {inventory['spark-ball']}</Text>
+          <Text style={styles.itemTitle}>Bola chispa</Text>
+          <Text style={styles.itemText}>Atrapa un amigo salvaje durante el combate.</Text>
+          <Text style={styles.count}>Tienes: {inventory['spark-ball']}</Text>
         </View>
         <View style={styles.itemCard}>
-          <Text style={styles.itemTitle}>Big Potion</Text>
-          <Text style={styles.itemText}>Heals the whole team.</Text>
-          <SmallButton label={`Heal team (${inventory['big-potion']})`} onPress={() => useItem('big-potion')} color="#61B7FF" />
+          <Text style={styles.itemTitle}>Poción grande</Text>
+          <Text style={styles.itemText}>Cura a todo el equipo.</Text>
+          <SmallButton label={`Curar equipo (${inventory['big-potion']})`} onPress={() => useItem('big-potion')} color="#61B7FF" />
         </View>
       </Card>
 
       <BottomNav
         active="bag"
         items={[
-          { key: 'world', label: 'Map', onPress: () => { setScreen('world'); router.replace('/world' as never) } },
-          { key: 'battle', label: 'Battle', disabled: inventory['spark-ball'] <= 0 && inventory.berry <= 0, onPress: () => { setScreen('battle'); router.replace('/battle' as never) } },
-          { key: 'team', label: 'Team', onPress: () => { setScreen('team'); router.replace('/team' as never) } },
-          { key: 'bag', label: 'Bag', onPress: () => {} },
-          { key: 'profile', label: 'Profile', onPress: () => { setScreen('profile'); router.replace('/profile' as never) } },
+          { key: 'world', label: 'Mapa', onPress: () => { setScreen('world'); router.replace('/world' as never) } },
+          { key: 'battle', label: 'Combate', disabled: inventory['spark-ball'] <= 0 && inventory.berry <= 0, onPress: () => { setScreen('battle'); router.replace('/battle' as never) } },
+          { key: 'team', label: 'Equipo', onPress: () => { setScreen('team'); router.replace('/team' as never) } },
+          { key: 'bag', label: 'Mochila', onPress: () => {} },
+          { key: 'profile', label: 'Perfil', onPress: () => { setScreen('profile'); router.replace('/profile' as never) } },
         ]}
       />
     </Screen>

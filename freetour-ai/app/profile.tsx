@@ -33,34 +33,34 @@ export default function ProfileScreen() {
         <Pressable onLongPress={tryUnlock} delayLongPress={400} style={[styles.avatar, { backgroundColor: profile.avatarHue }]}>
           <Text style={styles.avatarText}>{profile.name?.slice(0, 1) || 'A'}</Text>
         </Pressable>
-        <Pill label="Trainer card" color={profile.avatarHue} />
+        <Pill label="Ficha de entrenador" color={profile.avatarHue} />
         <Title>{profile.name}</Title>
-        <Subtitle>Age {profile.age} · Starter {profile.starter}</Subtitle>
+        <Subtitle>Edad {profile.age} · Inicial {profile.starter}</Subtitle>
       </Card>
 
       <Card color="#61B7FF">
-        <Title>Settings</Title>
-        <View style={styles.settingRow}><Text style={styles.settingLabel}>Sound effects</Text><SmallButton label={settings.soundOn ? 'ON' : 'OFF'} onPress={() => toggleSetting('soundOn')} /></View>
-        <View style={styles.settingRow}><Text style={styles.settingLabel}>Voice cheer</Text><SmallButton label={settings.voiceOn ? 'ON' : 'OFF'} onPress={() => toggleSetting('voiceOn')} /></View>
-        <View style={styles.settingRow}><Text style={styles.settingLabel}>Haptics</Text><SmallButton label={settings.hapticsOn ? 'ON' : 'OFF'} onPress={() => toggleSetting('hapticsOn')} /></View>
+        <Title>Ajustes</Title>
+        <View style={styles.settingRow}><Text style={styles.settingLabel}>Sonido</Text><SmallButton label={settings.soundOn ? 'Sí' : 'No'} onPress={() => toggleSetting('soundOn')} /></View>
+        <View style={styles.settingRow}><Text style={styles.settingLabel}>Voz</Text><SmallButton label={settings.voiceOn ? 'Sí' : 'No'} onPress={() => toggleSetting('voiceOn')} /></View>
+        <View style={styles.settingRow}><Text style={styles.settingLabel}>Vibración</Text><SmallButton label={settings.hapticsOn ? 'Sí' : 'No'} onPress={() => toggleSetting('hapticsOn')} /></View>
       </Card>
 
       <Card color="#F9A8D4">
-        <Title>Hidden cabin</Title>
-        <Subtitle>Hold the avatar a few times, or type the secret helper word.</Subtitle>
-        <Field value={code} onChangeText={setCode} placeholder="secret word" />
-        <SmallButton label={flags.adminUnlocked ? 'Open admin' : 'Try secret'} onPress={tryUnlock} color="#F9A8D4" textColor="#1C2340" />
-        <SmallButton label="Start fresh adventure" onPress={resetGame} color="#FF8A5C" />
+        <Title>Cabina oculta</Title>
+        <Subtitle>Mantén pulsado el avatar varias veces o escribe la palabra secreta.</Subtitle>
+        <Field value={code} onChangeText={setCode} placeholder="palabra secreta" />
+        <SmallButton label={flags.adminUnlocked ? 'Abrir admin' : 'Probar secreto'} onPress={tryUnlock} color="#F9A8D4" textColor="#1C2340" />
+        <SmallButton label="Empezar de cero" onPress={resetGame} color="#FF8A5C" />
       </Card>
 
       <BottomNav
         active="profile"
         items={[
-          { key: 'world', label: 'Map', onPress: () => { setScreen('world'); router.replace('/world' as never) } },
-          { key: 'battle', label: 'Battle', onPress: () => { setScreen('battle'); router.replace('/battle' as never) } },
-          { key: 'team', label: 'Team', onPress: () => { setScreen('team'); router.replace('/team' as never) } },
-          { key: 'bag', label: 'Bag', onPress: () => { setScreen('bag'); router.replace('/bag' as never) } },
-          { key: 'profile', label: 'Profile', onPress: () => {} },
+          { key: 'world', label: 'Mapa', onPress: () => { setScreen('world'); router.replace('/world' as never) } },
+          { key: 'battle', label: 'Combate', onPress: () => { setScreen('battle'); router.replace('/battle' as never) } },
+          { key: 'team', label: 'Equipo', onPress: () => { setScreen('team'); router.replace('/team' as never) } },
+          { key: 'bag', label: 'Mochila', onPress: () => { setScreen('bag'); router.replace('/bag' as never) } },
+          { key: 'profile', label: 'Perfil', onPress: () => {} },
         ]}
       />
     </Screen>

@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react'
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { router } from 'expo-router'
-import { BottomNav, Card, Pill, Screen, SmallButton, StatBar, Subtitle, Title } from '../src/components/GameUI'
+import { BottomNav, Card, MonsterArt, Pill, Screen, SmallButton, StatBar, Subtitle, Title } from '../src/components/GameUI'
 import { typeColors } from '../src/data/pokemon'
 import { spriteForSpecies } from '../src/lib/pokedex'
 import { useGameStore } from '../src/store/gameStore'
@@ -35,11 +35,11 @@ export default function WorldScreen() {
     <Screen>
       <Card color={profile.avatarHue}>
         <Pill label={world.zoneName} color={profile.avatarHue} />
-        <Title>{profile.name}'s Adventure Map</Title>
-        <Subtitle>Tap the arrows to walk. Random encounters can pop up any time in the tall grass.</Subtitle>
+        <Title>Mapa de aventura de {profile.name}</Title>
+        <Subtitle>Toca las flechas para moverte. Los encuentros pueden salir en cualquier momento.</Subtitle>
         {lead ? (
           <View style={styles.leadRow}>
-            <Image source={{ uri: spriteForSpecies(lead.species) }} style={styles.heroSprite} />
+            <MonsterArt uri={spriteForSpecies(lead.species)} label={lead.species} size={92} accent={typeColors[lead.type]} />
             <View style={{ flex: 1, gap: 6 }}>
               <Text style={styles.heroName}>{lead.name}</Text>
               <Text style={styles.heroMeta}>Lv {lead.level} · {lead.species}</Text>
@@ -62,14 +62,14 @@ export default function WorldScreen() {
           })}
         </View>
         <View style={styles.controls}>
-          <Text style={styles.controlsTitle}>Walk around</Text>
-          <SmallButton label="⬆ Up" onPress={() => moveHero(0, -1)} />
+          <Text style={styles.controlsTitle}>Muévete</Text>
+          <SmallButton label="⬆ Arriba" onPress={() => moveHero(0, -1)} />
           <View style={styles.controlRow}>
-            <SmallButton label="⬅ Left" onPress={() => moveHero(-1, 0)} />
-            <SmallButton label="➡ Right" onPress={() => moveHero(1, 0)} />
+            <SmallButton label="⬅ Izquierda" onPress={() => moveHero(-1, 0)} />
+            <SmallButton label="➡ Derecha" onPress={() => moveHero(1, 0)} />
           </View>
-          <SmallButton label="⬇ Down" onPress={() => moveHero(0, 1)} />
-          <SmallButton label="Start a battle now" onPress={startEncounter} color="#FF8A5C" />
+          <SmallButton label="⬇ Abajo" onPress={() => moveHero(0, 1)} />
+          <SmallButton label="Empezar combate ya" onPress={startEncounter} color="#FF8A5C" />
         </View>
       </Card>
 
@@ -81,11 +81,11 @@ export default function WorldScreen() {
       <BottomNav
         active="world"
         items={[
-          { key: 'world', label: 'Map', onPress: () => { setScreen('world'); router.replace('/world' as never) } },
-          { key: 'battle', label: 'Battle', disabled: !battle, onPress: () => { setScreen('battle'); router.replace('/battle' as never) } },
-          { key: 'team', label: 'Team', onPress: () => { setScreen('team'); router.replace('/team' as never) } },
-          { key: 'bag', label: 'Bag', onPress: () => { setScreen('bag'); router.replace('/bag' as never) } },
-          { key: 'profile', label: 'Profile', onPress: () => { setScreen('profile'); router.replace('/profile' as never) } },
+          { key: 'world', label: 'Mapa', onPress: () => { setScreen('world'); router.replace('/world' as never) } },
+          { key: 'battle', label: 'Combate', disabled: !battle, onPress: () => { setScreen('battle'); router.replace('/battle' as never) } },
+          { key: 'team', label: 'Equipo', onPress: () => { setScreen('team'); router.replace('/team' as never) } },
+          { key: 'bag', label: 'Mochila', onPress: () => { setScreen('bag'); router.replace('/bag' as never) } },
+          { key: 'profile', label: 'Perfil', onPress: () => { setScreen('profile'); router.replace('/profile' as never) } },
         ]}
       />
     </Screen>

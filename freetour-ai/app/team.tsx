@@ -1,6 +1,6 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { router } from 'expo-router'
-import { BottomNav, Card, Pill, Screen, SmallButton, StatBar, Title } from '../src/components/GameUI'
+import { BottomNav, Card, MonsterArt, Pill, Screen, SmallButton, StatBar, Title } from '../src/components/GameUI'
 import { typeColors } from '../src/data/pokemon'
 import { spriteForSpecies } from '../src/lib/pokedex'
 import { useGameStore } from '../src/store/gameStore'
@@ -16,27 +16,27 @@ export default function TeamScreen() {
   return (
     <Screen>
       <Card color="#6DDC7B">
-        <Pill label={`Team ${party.length}/4`} color="#6DDC7B" />
-        <Title>Your buddy squad</Title>
+        <Pill label={`Equipo ${party.length}/4`} color="#6DDC7B" />
+        <Title>Tu escuadrón</Title>
         {party.map((buddy) => (
           <View key={buddy.uuid} style={styles.cardRow}>
-            <Image source={{ uri: spriteForSpecies(buddy.species) }} style={styles.sprite} />
+            <MonsterArt uri={spriteForSpecies(buddy.species)} label={buddy.species} size={74} accent={typeColors[buddy.type]} />
             <View style={{ flex: 1, gap: 5 }}>
               <Text style={styles.name}>{buddy.name}</Text>
-              <Text style={styles.meta}>{buddy.species} · Lv {buddy.level}</Text>
+              <Text style={styles.meta}>{buddy.species} · Nv {buddy.level}</Text>
               <StatBar value={buddy.currentHp} max={buddy.maxHp} color={typeColors[buddy.type]} />
             </View>
           </View>
         ))}
-        <SmallButton label="Heal everyone" onPress={healAll} color="#6DDC7B" textColor="#102038" />
+        <SmallButton label="Curar a todos" onPress={healAll} color="#6DDC7B" textColor="#102038" />
       </Card>
 
       <Card color="#FFD84D">
-        <Title>Sticker album</Title>
+        <Title>Álbum</Title>
         <View style={styles.album}>
           {collection.map((buddy) => (
             <View key={buddy.uuid} style={styles.albumCard}>
-              <Image source={{ uri: spriteForSpecies(buddy.species) }} style={styles.albumSprite} />
+              <MonsterArt uri={spriteForSpecies(buddy.species)} label={buddy.species} size={58} accent={typeColors[buddy.type]} />
               <Text style={styles.albumText}>{buddy.species}</Text>
             </View>
           ))}
@@ -46,11 +46,11 @@ export default function TeamScreen() {
       <BottomNav
         active="team"
         items={[
-          { key: 'world', label: 'Map', onPress: () => { setScreen('world'); router.replace('/world' as never) } },
-          { key: 'battle', label: 'Battle', disabled: party.every((p) => p.currentHp <= 0), onPress: () => { setScreen('battle'); router.replace('/battle' as never) } },
-          { key: 'team', label: 'Team', onPress: () => {} },
-          { key: 'bag', label: 'Bag', onPress: () => { setScreen('bag'); router.replace('/bag' as never) } },
-          { key: 'profile', label: 'Profile', onPress: () => { setScreen('profile'); router.replace('/profile' as never) } },
+          { key: 'world', label: 'Mapa', onPress: () => { setScreen('world'); router.replace('/world' as never) } },
+          { key: 'battle', label: 'Combate', disabled: party.every((p) => p.currentHp <= 0), onPress: () => { setScreen('battle'); router.replace('/battle' as never) } },
+          { key: 'team', label: 'Equipo', onPress: () => {} },
+          { key: 'bag', label: 'Mochila', onPress: () => { setScreen('bag'); router.replace('/bag' as never) } },
+          { key: 'profile', label: 'Perfil', onPress: () => { setScreen('profile'); router.replace('/profile' as never) } },
         ]}
       />
     </Screen>

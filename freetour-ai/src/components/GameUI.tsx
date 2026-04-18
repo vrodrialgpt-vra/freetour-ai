@@ -1,6 +1,6 @@
-import { ReactNode } from 'react'
+import { ReactNode, useState } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 
 export function Screen({ children }: { children: ReactNode }) {
   return (
@@ -59,6 +59,21 @@ export function StatBar({ value, max, color = '#6DDC7B' }: { value: number; max:
   )
 }
 
+export function MonsterArt({ uri, label, size = 88, accent = '#5D7CFF' }: { uri: string; label: string; size?: number; accent?: string }) {
+  const [failed, setFailed] = useState(false)
+  const initial = label.slice(0, 1).toUpperCase()
+
+  if (failed) {
+    return (
+      <View style={[styles.monsterFallback, { width: size, height: size, borderRadius: size / 2, borderColor: accent, backgroundColor: `${accent}22` }] }>
+        <Text style={[styles.monsterFallbackText, { fontSize: Math.max(24, Math.round(size * 0.34)) }]}>{initial}</Text>
+      </View>
+    )
+  }
+
+  return <Image source={{ uri }} style={{ width: size, height: size }} resizeMode="contain" onError={() => setFailed(true)} />
+}
+
 export function BottomNav({ items, active }: { items: { key: string; label: string; onPress: () => void; disabled?: boolean }[]; active: string }) {
   return (
     <View style={styles.nav}>
@@ -112,4 +127,6 @@ const styles = StyleSheet.create({
   navItemDisabled: { opacity: 0.4 },
   navText: { color: '#ECF2FF', fontWeight: '800', fontSize: 12 },
   navTextDisabled: { color: '#94A3C7' },
+  monsterFallback: { alignItems: 'center', justifyContent: 'center', borderWidth: 3 },
+  monsterFallbackText: { color: '#F8FAFF', fontWeight: '900' },
 })

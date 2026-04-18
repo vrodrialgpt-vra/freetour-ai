@@ -16,9 +16,9 @@ export default function AdminScreen() {
     return (
       <Screen>
         <Card color="#FF8A5C">
-          <Title>Nothing to see here</Title>
-          <Subtitle>This cabin is hidden until unlocked from the profile card.</Subtitle>
-          <SmallButton label="Back" onPress={() => { setScreen('profile'); router.replace('/profile' as never) }} />
+          <Title>Aquí no hay nada</Title>
+          <Subtitle>Esta cabina está oculta hasta desbloquearla desde el perfil.</Subtitle>
+          <SmallButton label="Volver" onPress={() => { setScreen('profile'); router.replace('/profile' as never) }} />
         </Card>
       </Screen>
     )
@@ -27,13 +27,13 @@ export default function AdminScreen() {
   return (
     <Screen>
       <Card color="#F9A8D4">
-        <Title>Admin cabin</Title>
-        <Subtitle>Quick tools for a parent or tester.</Subtitle>
-        <Text style={styles.note}>Hidden access is local to the saved profile and survives reloads.</Text>
-        <SmallButton label="Give gift pack" onPress={grantStarterPack} color="#FFD84D" textColor="#18223D" />
-        <SmallButton label="Heal whole team" onPress={healAll} color="#6DDC7B" textColor="#18223D" />
-        <SmallButton label="Reset all save data" onPress={resetGame} color="#FF8A5C" />
-        <SmallButton label="Back to map" onPress={() => { setScreen('world'); router.replace('/world' as never) }} color="#5D7CFF" />
+        <Title>Cabina admin</Title>
+        <Subtitle>Herramientas rápidas para probar o ayudar.</Subtitle>
+        <Text style={styles.note}>El acceso oculto es local al perfil guardado y sobrevive al recargar.</Text>
+        <SmallButton label="Dar pack regalo" onPress={grantStarterPack} color="#FFD84D" textColor="#18223D" />
+        <SmallButton label="Curar equipo" onPress={healAll} color="#6DDC7B" textColor="#18223D" />
+        <SmallButton label="Borrar partida" onPress={resetGame} color="#FF8A5C" />
+        <SmallButton label="Volver al mapa" onPress={() => { setScreen('world'); router.replace('/world' as never) }} color="#5D7CFF" />
       </Card>
     </Screen>
   )

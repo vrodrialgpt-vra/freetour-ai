@@ -1,6 +1,6 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { router } from 'expo-router'
-import { BottomNav, Card, Pill, Screen, SmallButton, StatBar, Subtitle, Title } from '../src/components/GameUI'
+import { BottomNav, Card, MonsterArt, Pill, Screen, SmallButton, StatBar, Subtitle, Title } from '../src/components/GameUI'
 import { typeColors } from '../src/data/pokemon'
 import { spriteForSpecies } from '../src/lib/pokedex'
 import { useGameStore } from '../src/store/gameStore'
@@ -20,9 +20,9 @@ export default function BattleScreen() {
     return (
       <Screen>
         <Card color="#FFD84D">
-          <Title>No battle right now</Title>
-          <Subtitle>Walk on the map to find a wild buddy.</Subtitle>
-          <SmallButton label="Back to map" onPress={() => { setScreen('world'); router.replace('/world' as never) }} color="#FFD84D" textColor="#16203A" />
+          <Title>No hay combate ahora</Title>
+          <Subtitle>Muévete por el mapa para encontrar un rival salvaje.</Subtitle>
+          <SmallButton label="Volver al mapa" onPress={() => { setScreen('world'); router.replace('/world' as never) }} color="#FFD84D" textColor="#16203A" />
         </Card>
       </Screen>
     )
@@ -31,12 +31,12 @@ export default function BattleScreen() {
   return (
     <Screen>
       <Card color={typeColors[battle.wild.type]}>
-        <Pill label={battle.result ? `Battle ${battle.result}` : 'Wild encounter'} color={typeColors[battle.wild.type]} />
+        <Pill label={battle.result ? `Combate ${battle.result}` : 'Encuentro salvaje'} color={typeColors[battle.wild.type]} />
         <Title>{battle.wild.species}</Title>
         <View style={styles.row}>
-          <Image source={{ uri: spriteForSpecies(battle.wild.species) }} style={styles.wildSprite} />
+          <MonsterArt uri={spriteForSpecies(battle.wild.species)} label={battle.wild.species} size={112} accent={typeColors[battle.wild.type]} />
           <View style={styles.info}>
-            <Text style={styles.meta}>Lv {battle.wild.level} · {battle.wild.type}</Text>
+            <Text style={styles.meta}>Nv {battle.wild.level} · {battle.wild.type}</Text>
             <StatBar value={battle.wild.currentHp} max={battle.wild.maxHp} color={typeColors[battle.wild.type]} />
             <Text style={styles.hp}>{battle.wild.currentHp}/{battle.wild.maxHp} HP</Text>
           </View>
@@ -46,9 +46,9 @@ export default function BattleScreen() {
       <Card color={typeColors[battle.hero.type]}>
         <Title>{battle.hero.name}</Title>
         <View style={styles.row}>
-          <Image source={{ uri: spriteForSpecies(battle.hero.species) }} style={styles.heroSprite} />
+          <MonsterArt uri={spriteForSpecies(battle.hero.species)} label={battle.hero.species} size={96} accent={typeColors[battle.hero.type]} />
           <View style={styles.info}>
-            <Text style={styles.meta}>Lv {battle.hero.level} · {battle.hero.species}</Text>
+            <Text style={styles.meta}>Nv {battle.hero.level} · {battle.hero.species}</Text>
             <StatBar value={battle.hero.currentHp} max={battle.hero.maxHp} color={typeColors[battle.hero.type]} />
             <Text style={styles.hp}>{battle.hero.currentHp}/{battle.hero.maxHp} HP</Text>
           </View>
@@ -56,7 +56,7 @@ export default function BattleScreen() {
       </Card>
 
       <Card color="#F9A8D4">
-        <Text style={styles.logTitle}>Battle log</Text>
+        <Text style={styles.logTitle}>Registro de combate</Text>
         {battle.log.slice(-5).map((entry, index) => (
           <Text key={`${entry}-${index}`} style={styles.logLine}>• {entry}</Text>
         ))}
@@ -64,21 +64,21 @@ export default function BattleScreen() {
 
       <Card color="#61B7FF">
         <View style={styles.actions}>
-          <SmallButton label="Rainbow hit" onPress={attackWild} color="#5D7CFF" />
-          <SmallButton label={`Berry (${inventory.berry})`} onPress={() => useItem('berry')} color="#6DDC7B" textColor="#11203B" />
-          <SmallButton label={`Spark Ball (${inventory['spark-ball']})`} onPress={throwBall} color="#FFD84D" textColor="#16203A" />
-          <SmallButton label="Run to map" onPress={fleeBattle} color="#FF8A5C" />
+          <SmallButton label="Golpe arcoíris" onPress={attackWild} color="#5D7CFF" />
+          <SmallButton label={`Baya (${inventory.berry})`} onPress={() => useItem('berry')} color="#6DDC7B" textColor="#11203B" />
+          <SmallButton label={`Bola chispa (${inventory['spark-ball']})`} onPress={throwBall} color="#FFD84D" textColor="#16203A" />
+          <SmallButton label="Huir al mapa" onPress={fleeBattle} color="#FF8A5C" />
         </View>
       </Card>
 
       <BottomNav
         active="battle"
         items={[
-          { key: 'world', label: 'Map', onPress: () => { setScreen('world'); router.replace('/world' as never) } },
-          { key: 'battle', label: 'Battle', onPress: () => {} },
-          { key: 'team', label: 'Team', onPress: () => { setScreen('team'); router.replace('/team' as never) } },
-          { key: 'bag', label: 'Bag', onPress: () => { setScreen('bag'); router.replace('/bag' as never) } },
-          { key: 'profile', label: 'Profile', onPress: () => { setScreen('profile'); router.replace('/profile' as never) } },
+          { key: 'world', label: 'Mapa', onPress: () => { setScreen('world'); router.replace('/world' as never) } },
+          { key: 'battle', label: 'Combate', onPress: () => {} },
+          { key: 'team', label: 'Equipo', onPress: () => { setScreen('team'); router.replace('/team' as never) } },
+          { key: 'bag', label: 'Mochila', onPress: () => { setScreen('bag'); router.replace('/bag' as never) } },
+          { key: 'profile', label: 'Perfil', onPress: () => { setScreen('profile'); router.replace('/profile' as never) } },
         ]}
       />
     </Screen>

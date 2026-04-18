@@ -20,8 +20,8 @@ export default function HomeScreen() {
     return (
       <Screen>
         <Card color="#7DD3FC">
-          <Title>Loading adventure...</Title>
-          <Subtitle>Your save crystal is warming up.</Subtitle>
+          <Title>Cargando aventura...</Title>
+          <Subtitle>Estamos despertando tu cristal de guardado.</Subtitle>
         </Card>
       </Screen>
     )
@@ -31,11 +31,11 @@ export default function HomeScreen() {
     return (
       <Screen>
         <Card color="#6DDC7B">
-          <Pill label="Save loaded" color="#6DDC7B" />
-          <Title>Welcome back, {profile.name}!</Title>
-          <Subtitle>Your team, map, bag and settings were restored from local save storage.</Subtitle>
+          <Pill label="Partida cargada" color="#6DDC7B" />
+          <Title>¡Bienvenido de nuevo, {profile.name}!</Title>
+          <Subtitle>Tu equipo, mapa, mochila y ajustes se han recuperado del guardado local.</Subtitle>
           <BigButton
-            label="Continue game"
+            label="Seguir partida"
             onPress={() => {
               setScreen('world')
               router.replace('/world' as never)
@@ -50,21 +50,21 @@ export default function HomeScreen() {
     <Screen>
       <Card color="#FFD84D">
         <Pill label="PixelMon Friends" color="#FFD84D" />
-        <Title>A tiny monster adventure for kids</Title>
-        <Subtitle>Pick a buddy, walk the map, battle softly, catch new friends and keep your save safe when the app closes.</Subtitle>
+        <Title>Una pequeña aventura de monstruitos</Title>
+        <Subtitle>Elige un compañero, recorre el mapa, lucha sin agobios, atrapa nuevos amigos y guarda tu partida al cerrar.</Subtitle>
         <View style={styles.tipRow}>
-          <View style={styles.tipBubble}><Text style={styles.tipText}>1. Write your name</Text></View>
-          <View style={styles.tipBubble}><Text style={styles.tipText}>2. Pick a buddy</Text></View>
-          <View style={styles.tipBubble}><Text style={styles.tipText}>3. Start</Text></View>
+          <View style={styles.tipBubble}><Text style={styles.tipText}>1. Escribe tu nombre</Text></View>
+          <View style={styles.tipBubble}><Text style={styles.tipText}>2. Elige compañero</Text></View>
+          <View style={styles.tipBubble}><Text style={styles.tipText}>3. Empieza</Text></View>
         </View>
       </Card>
 
       <Card color="#7DD3FC">
-        <Text style={styles.label}>Trainer name</Text>
-        <Field value={name} onChangeText={setName} placeholder="Type your name" />
-        <Text style={styles.label}>Age</Text>
+        <Text style={styles.label}>Nombre</Text>
+        <Field value={name} onChangeText={setName} placeholder="Escribe tu nombre" />
+        <Text style={styles.label}>Edad</Text>
         <Field value={age} onChangeText={setAge} placeholder="6" width={100} />
-        <Text style={styles.label}>Color glow</Text>
+        <Text style={styles.label}>Color</Text>
         <View style={styles.row}>
           {['#7DD3FC', '#F9A8D4', '#FCD34D', '#86EFAC'].map((color) => (
             <Pressable key={color} onPress={() => setAvatarHue(color)} style={({ pressed }) => [styles.colorDot, { backgroundColor: color }, avatarHue === color && styles.colorDotActive, pressed && styles.pressedChoice]}>
@@ -75,7 +75,7 @@ export default function HomeScreen() {
       </Card>
 
       <Card color="#FF8A5C">
-        <Text style={styles.label}>Choose your first buddy</Text>
+        <Text style={styles.label}>Elige tu primer compañero</Text>
         <View style={styles.grid}>
           {starterCards.map((card) => {
             const selected = starter === card.name
@@ -83,13 +83,13 @@ export default function HomeScreen() {
               <Pressable key={card.name} onPress={() => setStarter(card.name)} style={({ pressed }) => [styles.starterCard, selected && { borderColor: card.color, transform: [{ scale: 1.02 }] }, pressed && styles.pressedChoice]}>
                 <Image source={{ uri: card.sprite }} style={styles.sprite} />
                 <Text style={styles.cardName}>{card.name}</Text>
-                <Text style={[styles.cardMeta, selected && { color: '#fff' }]}>{selected ? 'Selected' : 'Tap to choose'}</Text>
+                <Text style={[styles.cardMeta, selected && { color: '#fff' }]}>{selected ? 'Elegido' : 'Toca para elegir'}</Text>
               </Pressable>
             )
           })}
         </View>
         <BigButton
-          label="Start adventure"
+          label="Empezar aventura"
           disabled={!ready}
           onPress={() => {
             createProfile({ name: name.trim(), age: age.trim() || '6', starter, avatarHue })
