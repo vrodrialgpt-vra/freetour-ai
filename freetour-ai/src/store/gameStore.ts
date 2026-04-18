@@ -88,7 +88,7 @@ const initialWorld = (): WorldState => ({
 })
 
 const initialState = {
-  hydrated: false,
+  hydrated: Platform.OS === 'web',
   activeScreen: 'home' as ScreenKey,
   profile: initialProfile,
   settings: { soundOn: true, voiceOn: true, hapticsOn: true },
