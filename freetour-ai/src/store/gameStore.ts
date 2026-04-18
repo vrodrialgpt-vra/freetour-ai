@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as Haptics from 'expo-haptics'
 import * as Speech from 'expo-speech'
+import { Platform } from 'react-native'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { seedByName, starterChoices, typeColors } from '../data/pokemon'
@@ -107,6 +108,23 @@ const say = (text: string, enabled: boolean) => {
     Speech.speak(text, { pitch: 1.25, rate: 0.92 })
   } catch {}
 }
+
+const webStorage = {
+  getItem: async (name: string) => {
+    if (typeof localStorage === 'undefined') return null
+    return localStorage.getItem(name)
+  },
+  setItem: async (name: string, value: string) => {
+    if (typeof localStorage === 'undefined') return
+    localStorage.setItem(name, value)
+  },
+  removeItem: async (name: string) => {
+    if (typeof localStorage === 'undefined') return
+    localStorage.removeItem(name)
+  },
+}
+
+const storage = createJSONStorage(() => (Platform.OS === 'web' ? webStorage : AsyncStorage))
 
 const tap = async (enabled: boolean) => {
   if (!enabled) return
@@ -306,7 +324,7 @@ export const useGameStore = create<GameState>()(
     }),
     {
       name: 'pixel-mon-save-v1',
-      storage: createJSONStorage(() => AsyncStorage),
+      storage,
       partialize: (state) => ({
         activeScreen: state.activeScreen,
         profile: state.profile,
@@ -319,7 +337,10 @@ export const useGameStore = create<GameState>()(
         battle: state.battle,
         lastToast: state.lastToast,
       }),
-      onRehydrateStorage: () => (state) => {
+      onRehydrateStorage: () => (state, error) => {
+        if (error) {
+          console.warn('Failed to hydrate save storage', error)
+        }
         state?.setHydrated(true)
       },
     },
